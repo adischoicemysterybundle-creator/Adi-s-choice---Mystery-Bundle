@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Thank you – Adi's Choice</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="header">
+<img src="logo.jpeg" alt="Adi's Choice Logo" class="logo">
+<h1>Thank you!</h1>
+<p>Your order has been received.</p>
+</header>
+
+<main class="container">
+<div class="section">
+<h2>Order Summary</h2>
+<div id="orderSummaryBox">Loading…</div>
+</div>
+
+<div class="section">
+<h2>Payment</h2>
+<p>Please transfer the total amount (order total + shipping cost) to:</p>
+<p><strong>IBAN: LT403130010118858430</strong></p>
+<p class="note">Please include your full name in the transfer title. Shipping cost will be added depending on the courier.</p>
+</div>
+
+<a href="index.html" class="btn">Back to homepage</a>
+</main>
+
+<footer class="footer">&copy; 2025 Adi’s Choice Mystery Bundle</footer>
+
+<script>
+// read summary from localStorage or from query params fallback
+let stored = null;
+try{ stored = JSON.parse(localStorage.getItem('orderSummary')); } catch(e){}
+const params = new URLSearchParams(window.location.search);
+
+function buildHtml(order){
+let html = '';
+if(order.classic) html += `<div><strong>Classic:</strong> ${order.classic}</div>`;
+if(order.super) html += `<div><strong>Super:</strong> ${order.super}</div>`;
+if(order.premium) html += `<div><strong>Premium:</strong> ${order.premium}</div>`;
+html += `<div style="margin-top:8px"><strong>Total (without shipping):</strong> ${order.total}</div>`;
+return html;
+}
+
+if(stored && stored.total){
+document.getElementById('orderSummaryBox').innerHTML = buildHtml(stored);
+} else if(params.get('total')){
+const o = {
+classic: params.get('classic') && params.get('classic') !== '0' ? params.get('classic') + ' picks' : null,
+super: params.get('super') && params.get('super') !== '0' ? params.get('super') : null,
+premium: params.get('premium') && params.get('premium') !== '0' ? params.get('premium') : null,
+total: (params.get('total') ? params.get('total').replace('.',',') + ' €' : '0,00 €')
+};
+document.getElementById('orderSummaryBox').innerHTML = buildHtml(o);
+} else {
+document.getElementById('orderSummaryBox').innerHTML = '<p>No order data found.</p>';
+}
+</script>
+</body>
+</html>
+	

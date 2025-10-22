@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Adi's Choice – Mystery Bundles</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="header">
+<img src="logo.jpeg" alt="Adi's Choice Logo" class="logo">
+<h1>Adi’s Choice – Mystery Bundles</h1>
+<p>Choose Classic, Super or Premium picks — surprise bundles chosen by Adi.</p>
+</header>
+
+<main class="container">
+<div class="section">
+<h2>Classic Picks</h2>
+<label for="classic">Choose bundle size (optional)</label>
+<select id="classic">
+<option value="0">-- No Classic Picks --</option>
+<option value="6.5" data-label="5 picks – €6.50">5 picks – €6.50</option>
+<option value="11.5" data-label="10 picks – €11.50">10 picks – €11.50</option>
+<option value="16" data-label="15 picks – €16.00">15 picks – €16.00</option>
+<option value="20" data-label="20 picks – €20.00">20 picks – €20.00</option>
+<option value="23" data-label="25 picks – €23.00">25 picks – €23.00</option>
+<option value="26.5" data-label="30 picks – €26.50">30 picks – €26.50</option>
+<option value="30" data-label="35 picks – €30.00">35 picks – €30.00</option>
+</select>
+</div>
+
+<div class="section">
+<h2>Super Picks</h2>
+<label for="super">Choose one option (optional)</label>
+<select id="super">
+<option value="0">-- No Super Pick --</option>
+<option value="5" data-label="1 Super pick – €5.00">1 – €5.00</option>
+<option value="18.5" data-label="5 Super picks – €18.50">5 – €18.50</option>
+<option value="35" data-label="10 Super picks – €35.00">10 – €35.00</option>
+</select>
+</div>
+
+<div class="section">
+<h2>Premium Picks</h2>
+<label for="premium">Choose one option (optional)</label>
+<select id="premium">
+<option value="0">-- No Premium Pick --</option>
+<option value="7" data-label="1 Premium pick – €7.00">1 – €7.00</option>
+<option value="28" data-label="5 Premium picks – €28.00">5 – €28.00</option>
+</select>
+</div>
+
+<div class="total-box" id="totalBox">Total: €0,00</div>
+
+<button class="btn" id="toCheckout">Proceed to Checkout</button>
+</main>
+
+<footer class="footer">
+&copy; 2025 Adi’s Choice Mystery Bundle
+</footer>
+
+<script>
+// price display
+function fmt(n){ return n.toFixed(2).replace('.',',') + ' €'; }
+
+const classicEl = document.getElementById('classic');
+const superEl = document.getElementById('super');
+const premiumEl = document.getElementById('premium');
+const totalBox = document.getElementById('totalBox');
+
+function updateTotal(){
+const c = parseFloat(classicEl.value) || 0;
+const s = parseFloat(superEl.value) || 0;
+const p = parseFloat(premiumEl.value) || 0;
+const total = c + s + p;
+totalBox.textContent = 'Total: ' + fmt(total);
+}
+
+classicEl.addEventListener('change', updateTotal);
+superEl.addEventListener('change', updateTotal);
+premiumEl.addEventListener('change', updateTotal);
+updateTotal();
+
+document.getElementById('toCheckout').addEventListener('click', () => {
+const cVal = classicEl.value;
+const sVal = superEl.value;
+const pVal = premiumEl.value;
+const cLabel = classicEl.options[classicEl.selectedIndex].dataset.label || '';
+const sLabel = superEl.options[superEl.selectedIndex].dataset.label || '';
+const pLabel = premiumEl.options[premiumEl.selectedIndex].dataset.label || '';
+const total = (parseFloat(cVal||0)+parseFloat(sVal||0)+parseFloat(pVal||0)).toFixed(2);
+
+if(cVal == '0' && sVal == '0' && pVal == '0'){
+alert('Please select at least one type of pick to continue.');
+return;
+}
+
+// save summary to localStorage for checkout and thankyou
+const orderSummary = {
+classic: cLabel || null,
+super: sLabel || null,
+premium: pLabel || null,
+total: total.replace('.',',') + ' €'
+};
+localStorage.setItem('orderSummary', JSON.stringify(orderSummary));
+
+// redirect with query params (in case someone wants)
+const q = `?classic=${encodeURIComponent(cVal)}&super=${encodeURIComponent(sVal)}&premium=${encodeURIComponent(pVal)}&total=${encodeURIComponent(total)}`;
+window.location.href = 'checkout.html' + q;
+});
+</script>
+</body>
+</html>
+	
+

@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Checkout – Adi's Choice</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="header">
+<img src="logo.jpeg" alt="Adi's Choice Logo" class="logo">
+<h1>Checkout</h1>
+<p>Fill your delivery details and confirm the order.</p>
+</header>
+
+<main class="container">
+<form id="checkoutForm" action="https://formsubmit.co/adischoice.mysterybundle@gmail.com" method="POST">
+<!-- Hidden fields for FormSubmit (some will be filled dynamically) -->
+<input type="hidden" name="_subject" value="New Mystery Bundle Order">
+<input type="hidden" name="_template" value="table">
+<input type="hidden" name="_next" id="_next" value="https://adis-choice-mystery-bundles.vercel.app/thankyou.html">
+<!-- order summary and autoresponse filled by JS -->
+<input type="hidden" name="order_summary" id="order_summary">
+<input type="hidden" name="order_total" id="order_total">
+<input type="hidden" name="_autoresponse" id="_autoresponse">
+
+<div class="section">
+<h2>Your Order</h2>
+<div id="orderBox" class="total-box">Loading order…</div>
+</div>
+
+<div class="section">
+<h2>Delivery Information</h2>
+<label for="fullname">Full name</label>
+<input id="fullname" name="Full Name" type="text" required>
+
+<label for="email">Email address</label>
+<input id="email" name="Email" type="email" required>
+
+<label for="phone">Phone number</label>
+<input id="phone" name="Phone" type="tel">
+
+<label for="street">Street & number</label>
+<input id="street" name="Street" type="text" required>
+
+<label for="city">City</label>
+<input id="city" name="City" type="text" required>
+
+<label for="postal">Postal code</label>
+<input id="postal" name="Postal Code" type="text" required>
+
+<label for="country">Country</label>
+<input id="country" name="Country" type="text" required>
+</div>
+
+<div class="section">
+<h2>Shipping Method</h2>
+<p class="note">Choose courier — shipping cost will be added to the total later.</p>
+<div class="radio-row">
+<label><input type="radio" name="Delivery Method" value="DPD" required> DPD</label>
+<label><input type="radio" name="Delivery Method" value="InPost"> InPost</label>
+<label><input type="radio" name="Delivery Method" value="DHL"> DHL</label>
+<label><input type="radio" name="Delivery Method" value="Other"> Other</label>
+</div>
+<label for="otherCourier">If Other, specify</label>
+<input id="otherCourier" name="Other Shipping Option" type="text" placeholder="Courier name">
+</div>
+
+<div class="section">
+<h2>Payment</h2>
+<p class="note">Only bank transfer is available. Details will be provided in confirmation email.</p>
+<label><input type="radio" name="Payment Method" value="Bank Transfer" required> Bank Transfer</label>
+<p style="margin-top:10px"><strong>Bank account (IBAN):</strong> LT403130010118858430</p>
+</div>
+
+<button class="btn" type="submit">Confirm Order</button>
+</form>
+</main>
+
+<footer class="footer">&copy; 2025 Adi’s Choice Mystery Bundle</footer>
+
+<script>
+// helper
+function fmtEUR(n){ return Number(n).toFixed(2).replace('.',',') + ' €'; }
+
+// Load order either from localStorage or from query params
+function readOrderFromLocalOrParams(){
+let stored = null;
+try{ stored = JSON.parse(localStorage.getItem('orderSummary')); } catch(e){}
+const params = new URLSearchParams(window.location.search);
+const totalParam = params.get('total');
+
+if(stored && stored.total){
+return stored;
+} else if(totalParam !== null){
+// rebuild from query params
+const c = params.get('classic') || '0';
+const s = params.get('super') || '0';
+const p = params.get('premium') || '0';
+const order = {
+classic: (c !== '0') ? `${c} picks` : null,
+super: (s !== '0') ? `${s}` : null,
+premium: (p !== '0') ? `${p}` : null,
+total: (totalParam.indexOf(',') === -1) ? (parseFloat(totalParam).toFixed(2).replace('.',',') + ' €') : totalParam + ' €'
+};
+return order;
+} else {
+return { classic:null, super:null, premium:null, total:'0,00 €' };
+}
+}
+
+function buildOrderText(order){
+let html = '';
+if(order.classic) html += `<div><strong>Classic:</strong> ${order.classic}</div>`;
+if(order.super) html += `<div><strong>Super:</strong> ${order.super}</div>`;
+if(order.premium) html += `<div><strong>Premium:</strong> ${order.premium}</div>`;
+html += `<div style="margin-top:8px"><strong>Total (without shipping):</strong> ${order.total}</div>`;
+return html;
+}
+
+const order = readOrderFromLocalOrParams();
+document.getElementById('orderBox').innerHTML = buildOrderText(order);
+
+// Fill hidden order fields for FormSubmit. We'll also set autoresponse dynamically before submit.
+document.getElementById('order_summary').value =
+`Order summary:\n${order.classic? 'Classic: ' + order.classic + '\n' : ''}${order.super? 'Super: ' + order.super + '\n' : ''}${order.premium? 'Premium: ' + order.premium + '\n' : ''}Total (without shipping): ${order.total}`;
+
+document.getElementById('order_total').value = order.total;
+
+// Before submit - set autoresponse with order + delivery/payment details
+const form = document.getElementById('checkoutForm');
+form.addEventListener('submit', function(e){
+// ensure required radio selection etc. HTML required attributes will stop submission if missing
+const delivery = document.querySelector('input[name="Delivery Method"]:checked');
+const payment = document.querySelector('input[name="Payment Method"]:checked');
+
+if(!delivery || !payment){
+alert('Please select delivery and payment method.');
+e.preventDefault();
+return;
+}
+
+// Read customer name and email for autoresponse personalization
+const name = document.getElementById('fullname').value || '';
+const email = document.getElementById('email').value || '';
+const shipping = delivery ? delivery.value : '';
+const otherCourier = document.getElementById('otherCourier').value || '';
+const paymentMethod = payment ? payment.value : '';
+
+// Build autoresponse message (sent to client)
+let autoresp = `Hello ${name}!\n\nThank you for your order at Adi's Choice Mystery Bundle.\n\n`;
+autoresp += `Order details:\n${order.classic? 'Classic: ' + order.classic + '\n' : ''}${order.super? 'Super: ' + order.super + '\n' : ''}${order.premium? 'Premium: ' + order.premium + '\n' : ''}Total (without shipping): ${order.total}\n\n`;
+autoresp += `Chosen delivery method: ${shipping}${(shipping==='Other' && otherCourier)? ' ('+otherCourier+')':''}\n`;
+autoresp += `Chosen payment method: ${paymentMethod}\n\n`;
+autoresp += `Important: shipping cost is NOT included above and will be added depending on the chosen courier.\n\n`;
+autoresp += `Please transfer the total amount (order total + shipping) to the following bank account:\nIBAN: LT403130010118858430\nAccount holder: Adi's Choice\nReference: Your full name + Mystery Bundle\n\nOnce we receive your payment, we will ship your order. Thank you!\nAdi's Choice Team`;
+
+document.getElementById('_autoresponse').value = autoresp;
+
+// Also update the order_summary hidden in case something changed
+document.getElementById('order_summary').value += `\nChosen delivery method: ${shipping}${(shipping==='Other' && otherCourier)? ' ('+otherCourier+')':''}\nChosen payment method: ${paymentMethod}\nCustomer email: ${email}`;
+
+// allow form to submit
+});
+</script>
+</body>
+</html>
