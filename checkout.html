@@ -8,70 +8,66 @@
 </head>
 <body>
 <header>
-<img src="B0861919-6269-4D8E-9724-58E712D1A8C1.jpeg" alt="Adi's Choice Logo" class="logo" />
-<h1>Checkout - Adi’s Choice Mystery Bundle</h1>
+<img src="B0861919-6269-4D8E-9724-58E712D1A8C1.jpeg" alt="Adi’s Choice Logo" class="logo">
+<h1>Checkout</h1>
 </header>
 
 <main>
 <form
-action="https://formsubmit.co/adischoice.mysterybundle@gmail.com"
+action="https://formspree.io/f/xnngvjaz"
 method="POST"
 >
-<!-- hidden config -->
-<input type="hidden" name="_subject" value="New Mystery Bundle Order!">
-<input type="hidden" name="_next" value="https://adi-s-choice-mystery-bundle.vercel.app/thankyou.html">
-<input type="hidden" name="_template" value="table">
-<input type="hidden" name="_autoresponse" value="Thank you for your order at Adi’s Choice Mystery Bundle! Your payment details and shipping information will be confirmed by email. Please remember that delivery cost will be added.">
-
-<h2>Customer Information</h2>
-<label>Full Name:</label>
-<input type="text" name="Name" required />
-
-<label>Email Address:</label>
-<input type="email" name="Email" required />
-
-<label>Phone Number:</label>
-<input type="tel" name="Phone" required />
-
-<h2>Shipping Address</h2>
-<label>Street Address:</label>
-<input type="text" name="Address" required />
-
-<label>City:</label>
-<input type="text" name="City" required />
-
-<label>Postal Code:</label>
-<input type="text" name="Postal Code" required />
-
-<label>Country:</label>
-<input type="text" name="Country" required />
-
-<h2>Shipping Method</h2>
-<select name="Shipping Method" required>
-<option value="">-- Select Delivery Option --</option>
-<option value="DPD Courier">DPD Courier</option>
-<option value="DHL">DHL</option>
-<option value="InPost">InPost</option>
-</select>
-
-<h2>Payment Method</h2>
-<label>
-<input type="radio" name="Payment Method" value="Bank Transfer" required />
-Bank Transfer
+<h2>Delivery Information</h2>
+<label>Full Name:
+<input type="text" name="Full Name" required>
+</label>
+<label>Email Address:
+<input type="email" name="Email" required>
+</label>
+<label>Street Address:
+<input type="text" name="Address" required>
+</label>
+<label>City:
+<input type="text" name="City" required>
+</label>
+<label>Postal Code:
+<input type="text" name="Postal Code" required>
+</label>
+<label>Country:
+<input type="text" name="Country" required>
 </label>
 
-<div class="bank-info">
-<p><strong>Bank Account:</strong> LT403130010118858430</p>
-<p>Please make the payment within 24 hours after placing your order.</p>
-<p><strong>Important:</strong> Shipping costs will be added to the total price depending on your delivery choice.</p>
-</div>
+<h2>Shipping Method</h2>
+<label><input type="radio" name="Shipping" value="DPD" required> DPD</label>
+<label><input type="radio" name="Shipping" value="DHL" required> DHL</label>
+<label><input type="radio" name="Shipping" value="InPost" required> InPost</label>
 
-<button type="submit">Confirm Order</button>
+<h2>Payment Method</h2>
+<label><input type="radio" name="Payment" value="Bank Transfer" required> Bank Transfer (only)</label>
+
+<input type="hidden" name="_subject" value="New Mystery Bundle Order!">
+<input type="hidden" name="_replyto" value="">
+<input type="hidden" name="_next" value="https://adi-s-choice-mystery-bundle.vercel.app/thankyou.html">
+
+<textarea name="message" style="display:none;">
+Hi there!
+
+Thank you for your purchase at Adi’s Choice Mystery Bundle!
+Your order has been received and is being processed.
+
+Please make a bank transfer to:
+IBAN: LT403130010118858430
+Amount: [Order total]
+
+Shipping costs will be added depending on your chosen delivery option.
+We’ll contact you once your package is ready.
+
+Best regards,
+Adi’s Choice Team
+</textarea>
+
+<button type="submit">Place Order</button>
 </form>
 </main>
-
-<footer>
-<p>© 2025 Adi’s Choice Mystery Bundle. All rights reserved.</p>
-</footer>
 </body>
 </html>
