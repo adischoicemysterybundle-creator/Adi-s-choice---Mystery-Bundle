@@ -1,115 +1,168 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Adi's Choice – Mystery Bundles</title>
-<link rel="stylesheet" href="style.css">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Adi’s Choice Mystery Bundle</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+<style>
+body {
+font-family: 'Poppins', sans-serif;
+background-color: #fafafa;
+margin: 0;
+padding: 0;
+color: #333;
+}
+
+header {
+background: #fff;
+padding: 15px;
+text-align: center;
+border-bottom: 2px solid #eee;
+}
+
+header img {
+max-width: 200px;
+}
+
+.container {
+width: 90%;
+max-width: 900px;
+margin: 40px auto;
+background: #fff;
+padding: 40px;
+border-radius: 10px;
+box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+h1 {
+text-align: center;
+color: #333;
+margin-bottom: 30px;
+}
+
+h2 {
+margin-top: 30px;
+color: #444;
+}
+
+.bundle-group {
+display: flex;
+flex-wrap: wrap;
+gap: 15px;
+margin-bottom: 25px;
+}
+
+.bundle {
+flex: 1 1 calc(33.333% - 10px);
+background: #f9f9f9;
+border: 1px solid #ddd;
+border-radius: 8px;
+text-align: center;
+padding: 15px;
+cursor: pointer;
+transition: all 0.3s;
+}
+
+.bundle:hover {
+background-color: #f0f0f0;
+transform: scale(1.02);
+}
+
+.bundle input {
+margin-top: 10px;
+}
+
+button {
+display: block;
+width: 100%;
+padding: 15px;
+background-color: #000;
+color: white;
+border: none;
+border-radius: 5px;
+font-size: 16px;
+cursor: pointer;
+transition: 0.3s;
+margin-top: 20px;
+}
+
+button:hover {
+background-color: #333;
+}
+
+footer {
+text-align: center;
+font-size: 14px;
+color: #777;
+margin: 30px 0;
+}
+
+@media (max-width: 700px) {
+.bundle {
+flex: 1 1 100%;
+}
+}
+</style>
 </head>
 <body>
-<header class="header">
-<img src="logo.jpeg" alt="Adi's Choice Logo" class="logo">
-<h1>Adi’s Choice – Mystery Bundles</h1>
-<p>Choose Classic, Super or Premium picks — surprise bundles chosen by Adi.</p>
+<header>
+<img src="logo.jpeg" alt="Adi’s Choice Mystery Bundle Logo">
 </header>
 
-<main class="container">
-<div class="section">
+<div class="container">
+<h1>Adi’s Choice Mystery Bundle</h1>
+
 <h2>Classic Picks</h2>
-<label for="classic">Choose bundle size (optional)</label>
-<select id="classic">
-<option value="0">-- No Classic Picks --</option>
-<option value="6.5" data-label="5 picks – €6.50">5 picks – €6.50</option>
-<option value="11.5" data-label="10 picks – €11.50">10 picks – €11.50</option>
-<option value="16" data-label="15 picks – €16.00">15 picks – €16.00</option>
-<option value="20" data-label="20 picks – €20.00">20 picks – €20.00</option>
-<option value="23" data-label="25 picks – €23.00">25 picks – €23.00</option>
-<option value="26.5" data-label="30 picks – €26.50">30 picks – €26.50</option>
-<option value="30" data-label="35 picks – €30.00">35 picks – €30.00</option>
-</select>
+<div class="bundle-group" id="classic">
+<label class="bundle"><input type="radio" name="classic" value="5 picks - €6.50">5 picks – €6.50</label>
+<label class="bundle"><input type="radio" name="classic" value="10 picks - €11.50">10 picks – €11.50</label>
+<label class="bundle"><input type="radio" name="classic" value="15 picks - €16.00">15 picks – €16.00</label>
+<label class="bundle"><input type="radio" name="classic" value="20 picks - €20.00">20 picks – €20.00</label>
+<label class="bundle"><input type="radio" name="classic" value="25 picks - €23.00">25 picks – €23.00</label>
+<label class="bundle"><input type="radio" name="classic" value="30 picks - €26.50">30 picks – €26.50</label>
+<label class="bundle"><input type="radio" name="classic" value="35 picks - €30.00">35 picks – €30.00</label>
 </div>
 
-<div class="section">
 <h2>Super Picks</h2>
-<label for="super">Choose one option (optional)</label>
-<select id="super">
-<option value="0">-- No Super Pick --</option>
-<option value="5" data-label="1 Super pick – €5.00">1 – €5.00</option>
-<option value="18.5" data-label="5 Super picks – €18.50">5 – €18.50</option>
-<option value="35" data-label="10 Super picks – €35.00">10 – €35.00</option>
-</select>
+<div class="bundle-group" id="super">
+<label class="bundle"><input type="radio" name="super" value="1 Super Pick - €5">1 – €5</label>
+<label class="bundle"><input type="radio" name="super" value="5 Super Picks - €18.50">5 – €18.50</label>
+<label class="bundle"><input type="radio" name="super" value="10 Super Picks - €35">10 – €35</label>
 </div>
 
-<div class="section">
 <h2>Premium Picks</h2>
-<label for="premium">Choose one option (optional)</label>
-<select id="premium">
-<option value="0">-- No Premium Pick --</option>
-<option value="7" data-label="1 Premium pick – €7.00">1 – €7.00</option>
-<option value="28" data-label="5 Premium picks – €28.00">5 – €28.00</option>
-</select>
+<div class="bundle-group" id="premium">
+<label class="bundle"><input type="radio" name="premium" value="1 Premium Pick - €7">1 – €7</label>
+<label class="bundle"><input type="radio" name="premium" value="5 Premium Picks - €28">5 – €28</label>
 </div>
 
-<div class="total-box" id="totalBox">Total: €0,00</div>
+<button id="checkoutBtn">Proceed to checkout</button>
+</div>
 
-<button class="btn" id="toCheckout">Proceed to Checkout</button>
-</main>
-
-<footer class="footer">
-&copy; 2025 Adi’s Choice Mystery Bundle
+<footer>
+<p>© 2025 Adi’s Choice Mystery Bundle. All rights reserved.</p>
 </footer>
 
 <script>
-// price display
-function fmt(n){ return n.toFixed(2).replace('.',',') + ' €'; }
+document.getElementById("checkoutBtn").addEventListener("click", function() {
+const classic = document.querySelector('input[name="classic"]:checked');
+const superPick = document.querySelector('input[name="super"]:checked');
+const premium = document.querySelector('input[name="premium"]:checked');
 
-const classicEl = document.getElementById('classic');
-const superEl = document.getElementById('super');
-const premiumEl = document.getElementById('premium');
-const totalBox = document.getElementById('totalBox');
-
-function updateTotal(){
-const c = parseFloat(classicEl.value) || 0;
-const s = parseFloat(superEl.value) || 0;
-const p = parseFloat(premiumEl.value) || 0;
-const total = c + s + p;
-totalBox.textContent = 'Total: ' + fmt(total);
-}
-
-classicEl.addEventListener('change', updateTotal);
-superEl.addEventListener('change', updateTotal);
-premiumEl.addEventListener('change', updateTotal);
-updateTotal();
-
-document.getElementById('toCheckout').addEventListener('click', () => {
-const cVal = classicEl.value;
-const sVal = superEl.value;
-const pVal = premiumEl.value;
-const cLabel = classicEl.options[classicEl.selectedIndex].dataset.label || '';
-const sLabel = superEl.options[superEl.selectedIndex].dataset.label || '';
-const pLabel = premiumEl.options[premiumEl.selectedIndex].dataset.label || '';
-const total = (parseFloat(cVal||0)+parseFloat(sVal||0)+parseFloat(pVal||0)).toFixed(2);
-
-if(cVal == '0' && sVal == '0' && pVal == '0'){
-alert('Please select at least one type of pick to continue.');
+if (!classic && !superPick && !premium) {
+alert("Please select at least one bundle to continue!");
 return;
 }
 
-// save summary to localStorage for checkout and thankyou
-const orderSummary = {
-classic: cLabel || null,
-super: sLabel || null,
-premium: pLabel || null,
-total: total.replace('.',',') + ' €'
-};
-localStorage.setItem('orderSummary', JSON.stringify(orderSummary));
+const params = new URLSearchParams();
 
-// redirect with query params (in case someone wants)
-const q = `?classic=${encodeURIComponent(cVal)}&super=${encodeURIComponent(sVal)}&premium=${encodeURIComponent(pVal)}&total=${encodeURIComponent(total)}`;
-window.location.href = 'checkout.html' + q;
+if (classic) params.append("classic", classic.value);
+if (superPick) params.append("super", superPick.value);
+if (premium) params.append("premium", premium.value);
+
+window.location.href = `checkout.html?${params.toString()}`;
 });
 </script>
 </body>
 </html>
-	
-
