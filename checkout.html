@@ -2,153 +2,192 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Checkout – Adi’s Choice Mystery Bundle</title>
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
 <style>
 body {
-font-family: 'Poppins', sans-serif;
-background-color: #fafafa;
+font-family: "Poppins", sans-serif;
+background-color: #fffaf3;
+color: #333;
 margin: 0;
 padding: 0;
-color: #333;
 }
 
 header {
-background: #fff;
-padding: 15px;
 text-align: center;
-border-bottom: 2px solid #eee;
+background: white;
+padding: 25px;
+box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 header img {
-max-width: 200px;
-}
-
-.container {
-width: 90%;
-max-width: 700px;
-margin: 40px auto;
-background: #fff;
-padding: 30px;
-border-radius: 10px;
-box-shadow: 0 0 10px rgba(0,0,0,0.1);
+max-width: 150px;
+height: auto;
 }
 
 h1 {
-text-align: center;
-color: #444;
-margin-bottom: 20px;
-}
-
-form label {
-font-weight: 600;
-display: block;
+color: #bfa03a;
 margin-top: 15px;
+font-size: 26px;
+font-weight: 600;
 }
 
-form input, form select, form textarea {
+main {
+max-width: 600px;
+margin: 40px auto;
+background: white;
+padding: 35px;
+border-radius: 12px;
+box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+}
+
+label {
+display: block;
+font-weight: 600;
+margin-top: 18px;
+color: #444;
+}
+
+input, select, textarea {
 width: 100%;
-padding: 10px;
-margin-top: 5px;
-border: 1px solid #ccc;
-border-radius: 5px;
-font-family: 'Poppins', sans-serif;
+padding: 12px;
+margin-top: 6px;
+border: 1px solid #ddd;
+border-radius: 8px;
+background: #fff;
+font-size: 16px;
+box-sizing: border-box;
 }
 
-.delivery-options {
-margin-top: 10px;
+textarea {
+resize: vertical;
+min-height: 80px;
 }
 
-button {
+.btn {
 display: block;
 width: 100%;
+text-align: center;
+background: linear-gradient(135deg, #d4af37, #c9a227);
+color: white;
+font-weight: 600;
+font-size: 18px;
+border: none;
+border-radius: 8px;
+padding: 14px;
+margin-top: 30px;
+cursor: pointer;
+transition: all 0.3s ease;
+}
+
+.btn:hover {
+background: linear-gradient(135deg, #e2c451, #d1ad3f);
+transform: scale(1.02);
+}
+
+footer {
+text-align: center;
+margin-top: 50px;
+padding: 20px;
+color: #777;
+font-size: 14px;
+}
+
+footer a {
+color: #bfa03a;
+text-decoration: none;
+}
+
+footer a:hover {
+text-decoration: underline;
+}
+
+.account-info {
+background: #fff8dc;
+border: 1px solid #d4af37;
+border-radius: 8px;
 padding: 15px;
 margin-top: 25px;
-background-color: #000;
-color: white;
-border: none;
-border-radius: 5px;
-font-size: 16px;
-cursor: pointer;
-transition: 0.3s;
+font-size: 15px;
+color: #444;
 }
 
-button:hover {
-background-color: #333;
-}
-
-.note {
-text-align: center;
-font-size: 14px;
-color: #777;
-margin-top: 20px;
+.account-info strong {
+color: #bfa03a;
 }
 </style>
 </head>
 <body>
 <header>
-<img src="logo.jpeg" alt="Adi’s Choice Mystery Bundle Logo">
+<img src="logo.jpeg" alt="Adi’s Choice Logo" />
+<h1>Checkout</h1>
 </header>
 
-<div class="container">
-<h1>Checkout</h1>
+<main>
+<form
+action="https://formspree.io/f/xnngvjaz"
+method="POST"
+onsubmit="return validateForm()"
+>
+<label for="name">Full Name *</label>
+<input type="text" id="name" name="name" required />
 
-<form action="https://formspree.io/f/xnngvjaz" method="POST">
-<label for="name">Full name</label>
-<input type="text" id="name" name="name" required>
+<label for="email">Email *</label>
+<input type="email" id="email" name="_replyto" required />
 
-<label for="email">Email address</label>
-<input type="email" id="email" name="email" required>
+<label for="phone">Phone Number *</label>
+<input type="tel" id="phone" name="phone" required />
 
-<label for="address">Delivery address</label>
-<textarea id="address" name="address" rows="3" required></textarea>
+<label for="address">Full Address *</label>
+<input type="text" id="address" name="address" required />
 
-<label for="city">City</label>
-<input type="text" id="city" name="city" required>
-
-<label for="zip">ZIP / Postal code</label>
-<input type="text" id="zip" name="zip" required>
-
-<label for="country">Country</label>
-<input type="text" id="country" name="country" required>
-
-<label>Delivery method</label>
-<select name="delivery" required>
-<option value="">Select your courier</option>
+<label for="shipping">Delivery Method *</label>
+<select id="shipping" name="shipping" required>
+<option value="">Select</option>
 <option value="DPD">DPD</option>
 <option value="DHL">DHL</option>
 <option value="InPost">InPost</option>
-<option value="GLS">GLS</option>
 </select>
 
-<label for="payment">Payment method</label>
+<label for="payment">Payment Method *</label>
 <select id="payment" name="payment" required>
-<option value="">Select payment</option>
-<option value="bank">Bank transfer</option>
+<option value="">Select</option>
+<option value="bank">Bank Transfer</option>
 </select>
 
-<!-- Hidden autoresponse + copy -->
-<input type="hidden" name="_subject" value="New order - Adi’s Choice Mystery Bundle">
-<input type="hidden" name="_cc" value="adischoice.mysterybundle@gmail.com">
-<input type="hidden" name="_autoresponse" value="Hi there! 🎁
-Thank you for your order from Adi’s Choice Mystery Bundle!
-Your order has been received and is being processed.
+<label for="info">Additional information (e.g. preferred colors)</label>
+<textarea id="info" name="info" placeholder="Write your preferences here..."></textarea>
 
-Please make a bank transfer to:
-IBAN: LT403130010118858430
-Amount: [your total]
-(Shipping costs will be added based on your chosen delivery.)
-
-We'll contact you once your parcel is ready to ship!
-Best regards,
-Adi’s Choice Team">
-
-<button type="submit">Confirm order</button>
-</form>
-
-<p class="note">After confirming, you’ll receive an email with payment details. Thank you for your purchase!</p>
+<div class="account-info">
+<p>
+💳 Please make your payment to the following bank account:<br />
+<strong>LT403130010118858430</strong><br />
+(Include your name as the payment reference)
+</p>
 </div>
+
+<input type="hidden" name="_subject" value="Your Mystery Bundle from Adi’s Choice Order Confirmation" />
+<input type="hidden" name="_next" value="thankyou.html" />
+
+<button type="submit" class="btn">Place Order</button>
+</form>
+</main>
+
+<footer>
+<p>Contact us: <a href="mailto:adischoice.mysterybundle@gmail.com">adischoice.mysterybundle@gmail.com</a></p>
+</footer>
+
+<script>
+function validateForm() {
+const requiredFields = document.querySelectorAll("[required]");
+for (let field of requiredFields) {
+if (!field.value.trim()) {
+alert("Please fill in all required fields before submitting.");
+return false;
+}
+}
+return true;
+}
+</script>
 </body>
 </html>
-	
