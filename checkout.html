@@ -1,193 +1,129 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
 <title>Checkout – Adi’s Choice Mystery Bundle</title>
 <style>
-body {
-font-family: "Poppins", sans-serif;
-background-color: #fffaf3;
-color: #333;
-margin: 0;
-padding: 0;
-}
-
-header {
-text-align: center;
-background: white;
-padding: 25px;
-box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-}
-
-header img {
-max-width: 150px;
-height: auto;
-}
-
-h1 {
-color: #bfa03a;
-margin-top: 15px;
-font-size: 26px;
-font-weight: 600;
-}
-
-main {
-max-width: 600px;
-margin: 40px auto;
-background: white;
-padding: 35px;
-border-radius: 12px;
-box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
-}
-
-label {
-display: block;
-font-weight: 600;
-margin-top: 18px;
-color: #444;
-}
-
-input, select, textarea {
-width: 100%;
-padding: 12px;
-margin-top: 6px;
-border: 1px solid #ddd;
-border-radius: 8px;
-background: #fff;
-font-size: 16px;
-box-sizing: border-box;
-}
-
-textarea {
-resize: vertical;
-min-height: 80px;
-}
-
-.btn {
-display: block;
-width: 100%;
-text-align: center;
-background: linear-gradient(135deg, #d4af37, #c9a227);
-color: white;
-font-weight: 600;
-font-size: 18px;
-border: none;
-border-radius: 8px;
-padding: 14px;
-margin-top: 30px;
-cursor: pointer;
-transition: all 0.3s ease;
-}
-
-.btn:hover {
-background: linear-gradient(135deg, #e2c451, #d1ad3f);
-transform: scale(1.02);
-}
-
-footer {
-text-align: center;
-margin-top: 50px;
-padding: 20px;
-color: #777;
-font-size: 14px;
-}
-
-footer a {
-color: #bfa03a;
-text-decoration: none;
-}
-
-footer a:hover {
-text-decoration: underline;
-}
-
-.account-info {
-background: #fff8dc;
-border: 1px solid #d4af37;
-border-radius: 8px;
-padding: 15px;
-margin-top: 25px;
-font-size: 15px;
-color: #444;
-}
-
-.account-info strong {
-color: #bfa03a;
-}
+body{font-family:Arial, sans-serif;background:#fffaf3;margin:0;color:#222}
+header{text-align:center;padding:20px;background:#fff;border-bottom:1px solid #eee}
+header img{max-width:140px}
+.wrap{max-width:720px;margin:30px auto;background:#fff;padding:28px;border-radius:10px;box-shadow:0 8px 24px rgba(0,0,0,0.06)}
+label{display:block;margin-top:12px;font-weight:600}
+input,select,textarea{width:100%;padding:10px;margin-top:6px;border-radius:8px;border:1px solid #ddd}
+textarea{min-height:90px}
+.iban{background:#fff8dc;border-left:4px solid #b8860b;padding:10px;margin-top:14px;border-radius:6px}
+.btn{display:block;width:100%;padding:14px;background:linear-gradient(135deg,#d4af37,#c9a227);color:#fff;border:0;border-radius:8px;font-weight:700;margin-top:18px;cursor:pointer}
+.note{text-align:center;color:#666;font-size:14px;margin-top:12px}
+footer{text-align:center;padding:18px;color:#666}
 </style>
 </head>
 <body>
-<header>
-<img src="logo.jpeg" alt="Adi’s Choice Logo" />
-<h1>Checkout</h1>
-</header>
+<header><img src="logo.jpeg" alt="Logo"></header>
 
-<main>
-<form
-action="https://formspree.io/f/xnngvjaz"
-method="POST"
-onsubmit="return validateForm()"
->
-<label for="name">Full Name *</label>
-<input type="text" id="name" name="name" required />
+<div class="wrap">
+<h2>Checkout</h2>
+<p class="note">Fill in details. After submit you'll receive payment instructions.</p>
 
-<label for="email">Email *</label>
-<input type="email" id="email" name="_replyto" required />
-
-<label for="phone">Phone Number *</label>
-<input type="tel" id="phone" name="phone" required />
-
-<label for="address">Full Address *</label>
-<input type="text" id="address" name="address" required />
-
-<label for="shipping">Delivery Method *</label>
-<select id="shipping" name="shipping" required>
-<option value="">Select</option>
-<option value="DPD">DPD</option>
-<option value="DHL">DHL</option>
-<option value="InPost">InPost</option>
-</select>
-
-<label for="payment">Payment Method *</label>
-<select id="payment" name="payment" required>
-<option value="">Select</option>
-<option value="bank">Bank Transfer</option>
-</select>
-
-<label for="info">Additional information (e.g. preferred colors)</label>
-<textarea id="info" name="info" placeholder="Write your preferences here..."></textarea>
-
-<div class="account-info">
-<p>
-💳 Please make your payment to the following bank account:<br />
-<strong>LT403130010118858430</strong><br />
-(Include your name as the payment reference)
-</p>
+<div id="orderSummary" style="background:#fff7e6;border-left:6px solid #b8860b;padding:12px;border-radius:6px;margin-bottom:12px">
+Loading order…
 </div>
 
-<input type="hidden" name="_subject" value="Your Mystery Bundle from Adi’s Choice Order Confirmation" />
-<input type="hidden" name="_next" value="thankyou.html" />
+<form id="frm" action="https://formspree.io/f/xnngvjaz" method="POST">
+<!-- Formspree config -->
+<input type="hidden" name="_subject" value="Your Mystery Bundle from Adi’s Choice Order Confirmation">
+<input type="hidden" name="_cc" value="adischoice.mysterybundle@gmail.com">
+<input type="hidden" name="order_summary" id="order_summary">
+<input type="hidden" name="order_total" id="order_total">
+<!-- Set replyto and autoresponse (Formspree may honor these if account allows) -->
+<input type="hidden" name="_replyto" id="_replyto">
+<input type="hidden" name="_autoresponse" id="_autoresponse" value="">
 
-<button type="submit" class="btn">Place Order</button>
+<label for="name">Full name *</label>
+<input id="name" name="name" required>
+
+<label for="email">Email *</label>
+<input id="email" name="email" type="email" required>
+
+<label for="phone">Phone *</label>
+<input id="phone" name="phone" required>
+
+<label for="street">Street & number *</label>
+<input id="street" name="street" required>
+
+<label for="city">City *</label>
+<input id="city" name="city" required>
+
+<label for="zip">Postal code *</label>
+<input id="zip" name="zip" required>
+
+<label>Delivery method *</label>
+<select name="delivery" required>
+<option value="">Select</option>
+<option>DPD</option>
+<option>DHL</option>
+<option>InPost</option>
+<option>GLS</option>
+</select>
+
+<label>Payment method *</label>
+<select name="payment" required>
+<option value="">Select</option>
+<option>Bank transfer</option>
+</select>
+
+<label for="notes">Additional information <small style="font-weight:400;color:#666"> (e.g. preferred bundle colors)</small></label>
+<textarea id="notes" name="notes"></textarea>
+
+<div class="iban">
+<strong>Bank account</strong><br>IBAN: <strong>LT403130010118858430</strong><br>Include your name as reference.
+</div>
+
+<button type="submit" class="btn">Place order</button>
+<p class="note">You will be redirected to the thank you page shortly.</p>
 </form>
-</main>
+</div>
 
-<footer>
-<p>Contact us: <a href="mailto:adischoice.mysterybundle@gmail.com">adischoice.mysterybundle@gmail.com</a></p>
-</footer>
+<footer>Contact: <a href="mailto:adischoice.mysterybundle@gmail.com">adischoice.mysterybundle@gmail.com</a></footer>
 
 <script>
-function validateForm() {
-const requiredFields = document.querySelectorAll("[required]");
-for (let field of requiredFields) {
-if (!field.value.trim()) {
-alert("Please fill in all required fields before submitting.");
-return false;
+/* Populate order summary from localStorage saved by index.html */
+function loadOrder() {
+let order = null;
+try{ order = JSON.parse(localStorage.getItem('adi_order')); } catch(e){}
+if(!order){ document.getElementById('orderSummary').innerText = 'No order selected. Go back to shop.'; return; }
+const parts = [];
+if(order.classic) parts.push('<div><strong>Classic:</strong> ' + order.classic + '</div>');
+if(order.super) parts.push('<div><strong>Super:</strong> ' + order.super + '</div>');
+if(order.premium) parts.push('<div><strong>Premium:</strong> ' + order.premium + '</div>');
+parts.push('<div style="margin-top:8px"><strong>Total (without shipping):</strong> €' + Number(order.total).toFixed(2) + '</div>');
+document.getElementById('orderSummary').innerHTML = parts.join('');
+document.getElementById('order_summary').value = (order.classic? 'Classic: '+order.classic + '\n':'') + (order.super? 'Super: '+order.super + '\n':'') + (order.premium? 'Premium: '+order.premium + '\n':'');
+document.getElementById('order_total').value = '€' + Number(order.total).toFixed(2);
 }
-}
-return true;
-}
+loadOrder();
+
+/* Before form submit, set autoresponse & replyto dynamically */
+document.getElementById('frm').addEventListener('submit', function(e){
+// set reply-to to user email
+const email = document.getElementById('email').value || '';
+document.getElementById('_replyto').value = email;
+
+// build autoresponse plain text
+const name = document.getElementById('name').value || '';
+const notes = document.getElementById('notes').value || '';
+const orderSummary = document.getElementById('order_summary').value || '';
+const orderTotal = document.getElementById('order_total').value || '';
+const payment = document.querySelector('select[name="payment"]').value || '';
+const delivery = document.querySelector('select[name="delivery"]').value || '';
+
+const autoresp = `Hello ${name},\n\nThank you for your order at Adi's Choice Mystery Bundle!\n\nOrder details:\n${orderSummary}\nTotal (without shipping): ${orderTotal}\n\nDelivery: ${delivery}\nPayment: ${payment}\nAdditional info: ${notes}\n\nImportant: shipping costs will be added depending on chosen courier.\n\nPlease transfer the total (order + shipping) to:\nIBAN: LT403130010118858430\n\nBest regards,\nAdi's Choice Team`;
+
+document.getElementById('_autoresponse').value = autoresp;
+
+// Allow native submit to Formspree to proceed.
+// NOTE: if Formspree rejects autoresponse on your plan, customer won't get it — then use option B.
+});
 </script>
 </body>
 </html>
