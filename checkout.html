@@ -3,153 +3,126 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Mystery Bundle – Checkout</title>
+<title>Checkout | Adi’s Choice Mystery Bundle</title>
 <style>
 body {
 font-family: 'Poppins', sans-serif;
-background-color: #fffaf3;
+background-color: #fffaf5;
 color: #333;
 margin: 0;
 padding: 0;
 }
 header {
+background-color: #000;
+color: white;
 text-align: center;
 padding: 20px;
-background-color: #b99a3d;
-color: white;
 }
-form {
-max-width: 600px;
+header img {
+height: 60px;
+}
+main {
+max-width: 700px;
 margin: 40px auto;
-padding: 20px;
 background: white;
 border-radius: 10px;
-box-shadow: 0 0 10px rgba(0,0,0,0.1);
+padding: 30px;
+box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+h1 {
+text-align: center;
+color: #d4af37;
+}
+form {
+display: flex;
+flex-direction: column;
+gap: 15px;
 }
 label {
-display: block;
-margin-top: 15px;
 font-weight: 600;
 }
 input, select, textarea {
-width: 100%;
 padding: 10px;
-margin-top: 8px;
+border-radius: 6px;
 border: 1px solid #ccc;
-border-radius: 5px;
-font-size: 14px;
+font-size: 15px;
 }
 textarea {
 resize: vertical;
 }
 button {
-background-color: #b99a3d;
+background-color: #d4af37;
 color: white;
 border: none;
-padding: 12px 20px;
-font-size: 16px;
-border-radius: 5px;
+padding: 12px;
+border-radius: 6px;
+font-weight: 600;
 cursor: pointer;
-margin-top: 20px;
-width: 100%;
+transition: 0.3s;
 }
 button:hover {
-background-color: #a38430;
-}
-.note {
-font-size: 13px;
-color: #777;
+background-color: #c09b2e;
 }
 </style>
 </head>
 <body>
 <header>
-<img src="B0861919-6269-4D8E-9724-58E712D1A8C1.jpeg" alt="Adi's Choice Logo" style="width:120px;border-radius:8px;"><br>
-<h1>Checkout – Adi’s Choice Mystery Bundle</h1>
+<img src="logo.png" alt="Adi’s Choice Mystery Bundle Logo">
 </header>
 
-<form id="checkoutForm">
-<label for="name">Full Name</label>
-<input type="text" id="name" name="name" required>
+<main>
+<h1>Checkout</h1>
+<form id="checkout-form">
+<label>Full name</label>
+<input type="text" name="name" required>
 
-<label for="email">Email Address</label>
-<input type="email" id="email" name="email" required>
+<label>Email</label>
+<input type="email" name="email" required>
 
-<label for="bundle">Classic Picks</label>
-<select id="bundle" name="bundle">
-<option value="None">None</option>
-<option value="5 – €6.50">5 – €6.50</option>
-<option value="10 – €11.50">10 – €11.50</option>
-<option value="15 – €16.00">15 – €16.00</option>
-<option value="20 – €20.00">20 – €20.00</option>
-<option value="25 – €23.00">25 – €23.00</option>
-<option value="30 – €26.50">30 – €26.50</option>
-<option value="35 – €30.00">35 – €30.00</option>
+<label>Phone number</label>
+<input type="text" name="phone" required>
+
+<label>Address</label>
+<textarea name="address" rows="3" required></textarea>
+
+<label>Delivery method</label>
+<select name="delivery" required>
+<option value="">Select delivery option</option>
+<option>DPD</option>
+<option>DHL</option>
+<option>InPost</option>
 </select>
 
-<label for="superPick">Super Pick</label>
-<select id="superPick" name="superPick">
-<option value="None">None</option>
-<option value="1 – €5.00">1 – €5.00</option>
-<option value="5 – €18.50">5 – €18.50</option>
-<option value="10 – €35.00">10 – €35.00</option>
+<label>Payment method</label>
+<select name="payment" required>
+<option value="">Select payment option</option>
+<option>Bank transfer</option>
 </select>
 
-<label for="premiumPick">Premium Pick</label>
-<select id="premiumPick" name="premiumPick">
-<option value="None">None</option>
-<option value="1 – €7.00">1 – €7.00</option>
-<option value="5 – €28.00">5 – €28.00</option>
-</select>
+<label>Additional Information <small>(preferred colors, etc.)</small></label>
+<textarea name="extra" rows="3"></textarea>
 
-<label for="info">Additional Information <span class="note">(e.g. preferred colors)</span></label>
-<textarea id="info" name="info" rows="3"></textarea>
-
-<button type="submit">Confirm Order</button>
+<button type="submit">Place Order</button>
 </form>
+</main>
 
 <script>
-document.getElementById('checkoutForm').addEventListener('submit', async (e) => {
+document.getElementById('checkout-form').addEventListener('submit', async function(e) {
 e.preventDefault();
 
-const form = e.target;
-const data = {
-name: form.name.value,
-email: form.email.value,
-bundle: form.bundle.value,
-superPick: form.superPick.value,
-premiumPick: form.premiumPick.value,
-info: form.info.value,
-};
+const formData = new FormData(this);
+const data = Object.fromEntries(formData.entries());
 
-// Simple calculation of total (only for summary)
-const priceMap = {
-"5 – €6.50": 6.5, "10 – €11.50": 11.5, "15 – €16.00": 16, "20 – €20.00": 20,
-"25 – €23.00": 23, "30 – €26.50": 26.5, "35 – €30.00": 30,
-"1 – €5.00": 5, "5 – €18.50": 18.5, "10 – €35.00": 35,
-"1 – €7.00": 7, "5 – €28.00": 28
-};
-
-let total = 0;
-if (priceMap[data.bundle]) total += priceMap[data.bundle];
-if (priceMap[data.superPick]) total += priceMap[data.superPick];
-if (priceMap[data.premiumPick]) total += priceMap[data.premiumPick];
-data.total = total.toFixed(2);
-
-try {
 const response = await fetch('/api/send-confirmation', {
 method: 'POST',
 headers: { 'Content-Type': 'application/json' },
-body: JSON.stringify(data),
+body: JSON.stringify(data)
 });
 
 if (response.ok) {
 window.location.href = 'thankyou.html';
 } else {
-alert('Error sending order. Please try again.');
-}
-} catch (error) {
-alert('Network error. Please try again.');
+alert('Something went wrong. Please try again.');
 }
 });
 </script>
