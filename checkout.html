@@ -3,120 +3,75 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Checkout | Adi’s Choice Mystery Bundle</title>
-<style>
-body {
-font-family: 'Poppins', sans-serif;
-background-color: #fffaf5;
-color: #333;
-margin: 0;
-padding: 0;
-}
-header {
-background-color: #000;
-color: white;
-text-align: center;
-padding: 20px;
-}
-header img {
-height: 60px;
-}
-main {
-max-width: 700px;
-margin: 40px auto;
-background: white;
-border-radius: 10px;
-padding: 30px;
-box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-}
-h1 {
-text-align: center;
-color: #d4af37;
-}
-form {
-display: flex;
-flex-direction: column;
-gap: 15px;
-}
-label {
-font-weight: 600;
-}
-input, select, textarea {
-padding: 10px;
-border-radius: 6px;
-border: 1px solid #ccc;
-font-size: 15px;
-}
-textarea {
-resize: vertical;
-}
-button {
-background-color: #d4af37;
-color: white;
-border: none;
-padding: 12px;
-border-radius: 6px;
-font-weight: 600;
-cursor: pointer;
-transition: 0.3s;
-}
-button:hover {
-background-color: #c09b2e;
-}
-</style>
+<title>Checkout | Adi’s Choice</title>
+<link rel="stylesheet" href="style.css" />
 </head>
 <body>
 <header>
-<img src="logo.png" alt="Adi’s Choice Mystery Bundle Logo">
+<img src="logo.jpeg" alt="Adi’s Choice Logo" class="logo" />
+<h1>Checkout</h1>
 </header>
 
 <main>
-<h1>Checkout</h1>
-<form id="checkout-form">
-<label>Full name</label>
-<input type="text" name="name" required>
+<form id="checkoutForm" class="checkout-form">
+<h2>Your Details</h2>
+<input type="text" name="name" placeholder="Full Name" required />
+<input type="email" name="email" placeholder="Email Address" required />
 
-<label>Email</label>
-<input type="email" name="email" required>
+<h2>Your Bundle</h2>
+<div id="bundleSummary"></div>
 
-<label>Phone number</label>
-<input type="text" name="phone" required>
-
-<label>Address</label>
-<textarea name="address" rows="3" required></textarea>
-
-<label>Delivery method</label>
+<h2>Delivery Method</h2>
 <select name="delivery" required>
-<option value="">Select delivery option</option>
-<option>DPD</option>
-<option>DHL</option>
-<option>InPost</option>
+<option value="">Select delivery method</option>
+<option value="DPD Courier">DPD Courier</option>
+<option value="InPost">InPost</option>
+<option value="DHL">DHL</option>
 </select>
 
-<label>Payment method</label>
+<h2>Payment Method</h2>
 <select name="payment" required>
-<option value="">Select payment option</option>
-<option>Bank transfer</option>
+<option value="">Select payment method</option>
+<option value="Bank Transfer">Bank Transfer</option>
 </select>
 
-<label>Additional Information <small>(preferred colors, etc.)</small></label>
-<textarea name="extra" rows="3"></textarea>
+<h2>Additional Info</h2>
+<textarea name="additionalInfo" placeholder="Preferred colors, special requests..."></textarea>
 
-<button type="submit">Place Order</button>
+<button type="submit" class="btn">Place Order</button>
 </form>
 </main>
 
 <script>
-document.getElementById('checkout-form').addEventListener('submit', async function(e) {
+// Populate summary from selection
+const params = new URLSearchParams(window.location.search);
+const classic = params.get('classic') || 'None';
+const superPick = params.get('super') || 'None';
+const premium = params.get('premium') || 'None';
+
+const bundleSummary = `
+<p><strong>Classic Picks:</strong> ${classic}</p>
+<p><strong>Super Pick:</strong> ${superPick}</p>
+<p><strong>Premium Pick:</strong> ${premium}</p>
+`;
+document.getElementById('bundleSummary').innerHTML = bundleSummary;
+
+// Send form data via SendGrid API
+document.getElementById('checkoutForm').addEventListener('submit', async (e) => {
 e.preventDefault();
+const formData = Object.fromEntries(new FormData(e.target).entries());
 
-const formData = new FormData(this);
-const data = Object.fromEntries(formData.entries());
-
-const response = await fetch('/api/send-confirmation', {
+const response = await fetch('/api/sendEmail', {
 method: 'POST',
 headers: { 'Content-Type': 'application/json' },
-body: JSON.stringify(data)
+body: JSON.stringify({
+name: formData.name,
+email: formData.email,
+bundleType: `${classic} | ${superPick} | ${premium}`,
+bundleCount: 1,
+price: "TBD",
+additionalInfo: formData.additionalInfo,
+}),
 });
 
 if (response.ok) {
@@ -128,4 +83,3 @@ alert('Something went wrong. Please try again.');
 </script>
 </body>
 </html>
-	

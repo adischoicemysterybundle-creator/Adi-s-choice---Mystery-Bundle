@@ -1,77 +1,109 @@
-/* style.css - wspólny styl dla index, checkout, thankyou */
-:root{
---bg:#fafafa;
---card:#ffffff;
---accent:#ff6600;
---dark:#111;
---muted:#666;
+/* ===== Global ===== */
+body {
+margin: 0;
+padding: 0;
+font-family: "Poppins", Arial, sans-serif;
+background-color: #0b0b0b;
+color: #f5f5f5;
+text-align: center;
 }
 
-*{box-sizing:border-box}
-body{
-font-family: "Arial", Helvetica, sans-serif;
-background:var(--bg);
-color:#222;
-margin:0;
--webkit-font-smoothing:antialiased;
+header {
+background-color: #111;
+padding: 30px 10px;
+border-bottom: 2px solid #c6a450;
 }
 
-.header {
-background: linear-gradient(135deg, var(--dark), #333);
-color:#fff;
-text-align:center;
-padding:32px 16px;
-}
-.header .logo{max-width:160px;display:block;margin:0 auto 8px}
-.header h1{margin:0;font-size:24px}
-.header p{margin:6px 0 0;color:#ddd;font-size:14px}
-
-.container{
-max-width:760px;
-margin:28px auto;
-padding:24px;
-background:var(--card);
-border-radius:12px;
-box-shadow:0 6px 22px rgba(0,0,0,0.08);
+.logo {
+width: 120px;
+display: block;
+margin: 0 auto 15px;
+border-radius: 8px;
 }
 
-.section{margin-bottom:18px}
-.section h2{color:var(--accent);margin:0 0 12px;font-size:18px}
-label{display:block;margin:8px 0 6px;font-weight:600}
-select,input[type=text],input[type=email],input[type=tel],textarea{
-width:100%;
-padding:10px;
-border-radius:8px;
-border:1px solid #ddd;
-background:#fff;
-font-size:15px;
-}
-textarea{min-height:84px;resize:vertical}
-.radio-row{display:flex;flex-wrap:wrap;gap:10px;margin-top:8px}
-.radio-row label{font-weight:500}
-.note{color:var(--muted);font-size:13px;margin-top:8px}
-
-.total-box{
-background:#fff7ea;border-left:6px solid var(--accent);
-padding:12px;border-radius:8px;margin-top:12px;font-weight:600;
+h1 {
+font-size: 2.2rem;
+color: #c6a450;
+margin: 0;
 }
 
-.btn{
-display:block;
-width:100%;
-padding:14px;
-border-radius:9px;
-border:none;
-background:var(--accent);
-color:#fff;
-font-size:16px;
-cursor:pointer;
-margin-top:18px;
+p {
+font-size: 1rem;
+color: #ddd;
 }
-.btn:hover{opacity:0.96}
 
-.footer{ text-align:center;padding:16px;color:var(--muted);font-size:14px;margin-top:18px }
-@media(max-width:620px){
-.container{margin:18px;padding:18px}
-.header{padding:22px}
+main {
+padding: 30px 20px;
+}
+
+/* ===== Buttons ===== */
+.btn {
+background-color: #c6a450;
+color: #111;
+border: none;
+padding: 12px 25px;
+margin-top: 20px;
+font-size: 1rem;
+font-weight: 600;
+border-radius: 5px;
+cursor: pointer;
+transition: 0.3s;
+}
+
+.btn:hover {
+background-color: #e0b95b;
+}
+
+/* ===== Forms ===== */
+form {
+background-color: #1a1a1a;
+max-width: 500px;
+margin: 0 auto;
+padding: 25px;
+border-radius: 10px;
+border: 1px solid #c6a450;
+text-align: left;
+}
+
+label {
+display: block;
+margin-top: 15px;
+font-weight: 500;
+color: #f0e6d2;
+}
+
+select,
+input,
+textarea {
+width: 100%;
+margin-top: 8px;
+padding: 10px;
+border: 1px solid #c6a450;
+border-radius: 5px;
+background-color: #111;
+color: #fff;
+font-size: 0.95rem;
+}
+
+textarea {
+resize: vertical;
+height: 90px;
+}
+
+select:focus,
+input:focus,
+textarea:focus {
+outline: none;
+border-color: #e0b95b;
+}
+
+/* ===== Thank You Page ===== */
+main p {
+margin: 15px 0;
+}
+
+a.btn {
+text-decoration: none;
+display: inline-block;
+margin-top: 20px;
 }
