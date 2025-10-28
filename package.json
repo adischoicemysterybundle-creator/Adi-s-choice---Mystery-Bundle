@@ -1,0 +1,13 @@
+{
+"name": "adis-choice-mystery-bundle",
+"version": "1.0.0",
+"description": "Mystery Bundle Adi’s Choice",
+"main": "index.js",
+"scripts": {
+"start": "node index.js"
+},
+"dependencies": {
+"@sendgrid/mail": "^7.7.0"
+}
+}
+	
