@@ -1,10 +1,9 @@
+// api/sendEmail.js
 import sgMail from "@sendgrid/mail";
 
-// Klucz API zdefiniowany w Vercel → Settings → Environment Variables
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 export default async function handler(req, res) {
-// ✅ Akceptuj tylko zapytania POST (z formularza)
 if (req.method !== "POST") {
 return res.status(405).json({ message: "Only POST requests allowed" });
 }
@@ -19,58 +18,73 @@ city,
 postal,
 country,
 delivery,
-notes,
+additionalInfo,
 bundleType,
-bundleSize,
-totalPrice,
-} = req.body;
+bundlePrice
+} = req.body || {};
 
-// ✅ Mail do Ciebie (sprzedawcy)
-const sellerMessage = {
-to: "adischoice.mysterybundle@gmail.com",
-from: "adischoice.mysterybundle@gmail.com", // adres nadawcy z SendGrid
-subject: `🛍️ New Mystery Bundle Order from ${name}`,
+// Basic validation
+if (!name || !email || !bundleType || !bundlePrice) {
+return res.status(400).json({ message: "Missing required fields (name, email, bundleType, bundlePrice)" });
+}
+
+const ownerMessage = {
+to: process.env.FROM_EMAIL || "adischoice.mysterybundle@gmail.com",
+from: process.env.FROM_EMAIL || "adischoice.mysterybundle@gmail.com",
+subject: `🛍️ New Order from ${name}`,
 html: `
-<h2>New order received!</h2>
-<p><strong>Name:</strong> ${name}</p>
-<p><strong>Email:</strong> ${email}</p>
-<p><strong>Phone:</strong> ${phone}</p>
-<p><strong>Address:</strong> ${address}, ${postal} ${city}, ${country}</p>
-<p><strong>Delivery:</strong> ${delivery}</p>
-<p><strong>Notes:</strong> ${notes || "None"}</p>
-<p><strong>Bundle:</strong> ${bundleType} - ${bundleSize}</p>
-<p><strong>Total price:</strong> €${totalPrice}</p>
-`,
+<h2>New order received</h2>
+<p><strong>Name:</strong> ${escapeHtml(name)}</p>
+<p><strong>Email:</strong> ${escapeHtml(email)}</p>
+<p><strong>Phone:</strong> ${escapeHtml(phone || "—")}</p>
+<p><strong>Address:</strong> ${escapeHtml(address || "—")}, ${escapeHtml(postal || "—")} ${escapeHtml(city || "—")}, ${escapeHtml(country || "—")}</p>
+<p><strong>Delivery:</strong> ${escapeHtml(delivery || "—")}</p>
+<p><strong>Bundle:</strong> ${escapeHtml(bundleType)} — ${escapeHtml(bundlePrice)}</p>
+<p><strong>Additional info:</strong> ${escapeHtml(additionalInfo || "None")}</p>
+`
 };
 
-// ✅ Mail do klienta (potwierdzenie)
 const clientMessage = {
 to: email,
-from: "adischoice.mysterybundle@gmail.com",
-subject: "🎁 Your Mystery Bundle from Adi’s Choice – Order Confirmation",
+from: process.env.FROM_EMAIL || "adischoice.mysterybundle@gmail.com",
+subject: "Your Mystery Bundle from Adi’s Choice – Order Confirmation",
 html: `
-<h2>Thank you for your order, ${name}!</h2>
-<p>We’ve received your Mystery Bundle order.</p>
-<p><strong>Bundle:</strong> ${bundleType} - ${bundleSize}</p>
-<p><strong>Total:</strong> €${totalPrice}</p>
-<p>Bank account for payment: <strong>LT403130010118858430</strong></p>
-<p>Please include your name and email in the transfer title.</p>
-<p>Delivery cost will be added depending on the selected method.</p>
-<p>You’ll receive a confirmation once your payment is received.</p>
-<p>Thank you for choosing Adi’s Choice!</p>
-`,
+<div style="font-family:Arial,sans-serif;color:#222">
+<img src="${process.env.SITE_URL || ""}/logo.jpeg" alt="Adi's Choice" style="max-width:140px;margin-bottom:12px"/>
+<h2>Thank you for your order, ${escapeHtml(name)}!</h2>
+<p>We received your order for <strong>${escapeHtml(bundleType)}</strong> (total: <strong>${escapeHtml(bundlePrice)}</strong>).</p>
+<p><strong>Delivery:</strong> ${escapeHtml(delivery || "—")}</p>
+${additionalInfo ? `<p><strong>Your note:</strong> ${escapeHtml(additionalInfo)}</p>` : ""}
+<hr/>
+<h4>Payment details</h4>
+<p><strong>IBAN:</strong> LT403130010118858430</p>
+<p>Please include your full name in the transfer title.</p>
+<p>If you have any questions, reply to this email.</p>
+<p>Best regards,<br/>Adi’s Choice Team</p>
+</div>
+`
 };
 
-// ✅ Wysyłamy oba maile
-await sgMail.send(sellerMessage);
+// send mails
+await sgMail.send(ownerMessage);
 await sgMail.send(clientMessage);
 
-// ✅ Sukces
-return res.status(200).json({ message: "Emails sent successfully" });
-
-} catch (error) {
-console.error("SendGrid Error:", error);
-return res.status(500).json({ message: "Failed to send emails", error });
+return res.status(200).json({ message: "Emails sent" });
+} catch (err) {
+console.error("sendEmail error:", err);
+// if sendgrid gives response body, include it (stringified)
+const details = err && err.response && err.response.body ? err.response.body : String(err.message || err);
+return res.status(500).json({ message: "Failed to send emails", details });
 }
+}
+
+// simple escape to avoid injection in HTML mails
+function escapeHtml(str = "") {
+return String(str)
+.replace(/&/g, "&amp;")
+.replace(/</g, "&lt;")
+.replace(/>/g, "&gt;")
+.replace(/"/g, "&quot;")
+.replace(/'/g, "&#39;");
 }
 	
