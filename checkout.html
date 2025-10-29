@@ -3,152 +3,174 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Checkout — Adi’s Choice</title>
+<title>Checkout – Adi’s Choice</title>
 <link rel="stylesheet" href="style.css" />
 <style>
 body {
-background-color: #fffaf5;
-font-family: 'Poppins', sans-serif;
-color: #222;
+font-family: "Poppins", sans-serif;
+background-color: #fffaf2;
+color: #333;
 margin: 0;
 padding: 0;
 }
-
-.checkout-container {
-max-width: 500px;
-margin: 60px auto;
-background: white;
-padding: 40px;
-border-radius: 12px;
-box-shadow: 0 0 10px rgba(0,0,0,0.1);
+header {
+text-align: center;
+padding: 20px;
 }
-
-.checkout-container img {
-display: block;
-margin: 0 auto 20px;
-width: 130px;
+header img {
+width: 120px;
 }
-
 h1 {
 text-align: center;
-color: #c4a13f;
+color: #b28d2d;
 }
-
-form label {
-display: block;
-margin-top: 15px;
+form {
+max-width: 600px;
+margin: 20px auto;
+background: #fff;
+padding: 25px;
+border-radius: 10px;
+box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+label {
 font-weight: 600;
+display: block;
+margin-bottom: 6px;
 }
-
-form input, form select, form textarea {
+input, select, textarea {
 width: 100%;
 padding: 10px;
-margin-top: 5px;
-border: 1px solid #ddd;
-border-radius: 8px;
-font-size: 15px;
+margin-bottom: 15px;
+border-radius: 6px;
+border: 1px solid #ccc;
+font-size: 14px;
 }
-
 textarea {
-resize: none;
+resize: vertical;
+min-height: 70px;
 }
-
-button {
-display: block;
-width: 100%;
-margin-top: 25px;
-padding: 12px;
-background: #c4a13f;
-color: white;
-font-weight: bold;
-border: none;
+.order-summary {
+background: #fff8e1;
+border: 1px solid #e0c96b;
+padding: 15px;
 border-radius: 8px;
+margin-bottom: 20px;
+}
+button {
+width: 100%;
+background-color: #b28d2d;
+color: #fff;
+padding: 15px;
+border: none;
+border-radius: 6px;
+font-size: 16px;
 cursor: pointer;
 transition: 0.3s;
 }
-
 button:hover {
-background: #b3912c;
-}
-
-.error {
-color: red;
-text-align: center;
-margin-top: 10px;
+background-color: #9c7a24;
 }
 </style>
 </head>
 <body>
-<div class="checkout-container">
-<img src="logo.jpeg" alt="Adi's Choice Logo" />
+<header>
+<img src="logo.jpeg" alt="Adi’s Choice Logo">
+</header>
+
 <h1>Checkout</h1>
 
-<form id="checkoutForm">
+<form id="checkout-form">
+<div class="order-summary">
+<h3>Order Summary</h3>
+<p id="bundleName"></p>
+<p id="bundlePrice"></p>
+</div>
+
 <label for="name">Full Name</label>
 <input type="text" id="name" name="name" required />
 
 <label for="email">Email Address</label>
 <input type="email" id="email" name="email" required />
 
-<label for="bundleType">Mystery Bundle</label>
-<select id="bundleType" name="bundleType" required>
-<option value="">-- Choose your Mystery Bundle --</option>
-<option value="Classic 1 item">Classic — 1 item</option>
-<option value="Classic 5 items">Classic — 5 items</option>
-<option value="Classic 10 items">Classic — 10 items</option>
-<option value="Super Pick 1 item">Super Pick — 1 item</option>
-<option value="Super Pick 5 items">Super Pick — 5 items</option>
-<option value="Super Pick 10 items">Super Pick — 10 items</option>
-<option value="Premium Pick 1 item">Premium Pick — 1 item</option>
-<option value="Premium Pick 5 items">Premium Pick — 5 items</option>
+<label for="address">Street Address</label>
+<input type="text" id="address" name="address" required />
+
+<label for="city">City</label>
+<input type="text" id="city" name="city" required />
+
+<label for="postal">Postal Code</label>
+<input type="text" id="postal" name="postal" required />
+
+<label for="country">Country</label>
+<input type="text" id="country" name="country" required />
+
+<label for="delivery">Delivery Method</label>
+<select id="delivery" name="delivery" required>
+<option value="">Select delivery method</option>
+<option value="DPD">DPD</option>
+<option value="InPost">InPost</option>
+<option value="DHL">DHL</option>
+<option value="Poczta Polska">Poczta Polska</option>
 </select>
 
-<label for="bundlePrice">Total Amount (EUR)</label>
-<input type="number" id="bundlePrice" name="bundlePrice" placeholder="Enter total price" required />
-
 <label for="additionalInfo">Additional Info (e.g. preferred colors)</label>
-<textarea id="additionalInfo" name="additionalInfo" rows="3" placeholder="Optional"></textarea>
+<textarea id="additionalInfo" name="additionalInfo"></textarea>
 
 <button type="submit">Place Order</button>
-<p id="errorMsg" class="error"></p>
 </form>
-</div>
 
 <script>
-document.getElementById("checkoutForm").addEventListener("submit", async function(e) {
+// Load summary from localStorage
+document.addEventListener("DOMContentLoaded", () => {
+const bundleType = localStorage.getItem("bundleType") || "No bundle selected";
+const bundlePrice = localStorage.getItem("bundlePrice") || "0 EUR";
+document.getElementById("bundleName").textContent = "Selected: " + bundleType;
+document.getElementById("bundlePrice").textContent = "Price: " + bundlePrice;
+});
+
+document.getElementById("checkout-form").addEventListener("submit", async (e) => {
 e.preventDefault();
 
-const errorMsg = document.getElementById("errorMsg");
-errorMsg.textContent = "";
+const name = document.getElementById("name").value;
+const email = document.getElementById("email").value;
+const address = document.getElementById("address").value;
+const city = document.getElementById("city").value;
+const postal = document.getElementById("postal").value;
+const country = document.getElementById("country").value;
+const delivery = document.getElementById("delivery").value;
+const additionalInfo = document.getElementById("additionalInfo").value;
+const bundleType = localStorage.getItem("bundleType");
+const bundlePrice = localStorage.getItem("bundlePrice");
 
-const data = {
-name: document.getElementById("name").value.trim(),
-email: document.getElementById("email").value.trim(),
-bundleType: document.getElementById("bundleType").value,
-bundlePrice: document.getElementById("bundlePrice").value,
-additionalInfo: document.getElementById("additionalInfo").value.trim()
+const orderData = {
+name,
+email,
+address,
+city,
+postal,
+country,
+delivery,
+bundleType,
+bundlePrice,
+additionalInfo
 };
 
 try {
-const res = await fetch("/api/sendEmail", {
+const response = await fetch("/api/sendEmail", {
 method: "POST",
 headers: { "Content-Type": "application/json" },
-body: JSON.stringify(data)
+body: JSON.stringify(orderData)
 });
 
-if (res.ok) {
+if (response.ok) {
 window.location.href = "thankyou.html";
 } else {
-const result = await res.json();
-errorMsg.textContent = result.message || "Something went wrong. Please try again.";
+alert("Something went wrong. Please try again.");
 }
-} catch (err) {
-console.error(err);
-errorMsg.textContent = "An error occurred. Please try again.";
+} catch (error) {
+alert("Error sending order. Please try again later.");
 }
 });
 </script>
 </body>
 </html>
-	
-
