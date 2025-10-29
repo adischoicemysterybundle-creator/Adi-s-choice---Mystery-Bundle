@@ -92,6 +92,9 @@ background-color: #9c7a24;
 <label for="email">Email Address</label>
 <input type="email" id="email" name="email" required />
 
+<label for="phone">Phone Number</label>
+<input type="tel" id="phone" name="phone" required placeholder="+48 600 000 000" />
+
 <label for="address">Street Address</label>
 <input type="text" id="address" name="address" required />
 
@@ -133,6 +136,7 @@ e.preventDefault();
 
 const name = document.getElementById("name").value;
 const email = document.getElementById("email").value;
+const phone = document.getElementById("phone").value;
 const address = document.getElementById("address").value;
 const city = document.getElementById("city").value;
 const postal = document.getElementById("postal").value;
@@ -145,6 +149,7 @@ const bundlePrice = localStorage.getItem("bundlePrice");
 const orderData = {
 name,
 email,
+phone,
 address,
 city,
 postal,
@@ -162,15 +167,20 @@ headers: { "Content-Type": "application/json" },
 body: JSON.stringify(orderData)
 });
 
+const data = await response.json();
+
 if (response.ok) {
 window.location.href = "thankyou.html";
 } else {
+console.error("Server error:", data);
 alert("Something went wrong. Please try again.");
 }
 } catch (error) {
+console.error("Request failed:", error);
 alert("Error sending order. Please try again later.");
 }
 });
 </script>
 </body>
 </html>
+	
