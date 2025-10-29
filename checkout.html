@@ -3,83 +3,140 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Checkout | Adi’s Choice</title>
+<title>Checkout | Adi’s Choice Mystery Bundle</title>
 <link rel="stylesheet" href="style.css" />
+<style>
+body {
+font-family: Arial, sans-serif;
+background-color: #fffaf4;
+text-align: center;
+padding: 20px;
+}
+
+img.logo {
+width: 160px;
+margin-bottom: 20px;
+}
+
+form {
+max-width: 500px;
+margin: 0 auto;
+text-align: left;
+background: #fff;
+padding: 25px;
+border-radius: 10px;
+box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+label {
+display: block;
+margin: 10px 0 5px;
+font-weight: bold;
+}
+
+input, textarea {
+width: 100%;
+padding: 10px;
+margin-bottom: 15px;
+border: 1px solid #ccc;
+border-radius: 5px;
+}
+
+button {
+background-color: black;
+color: white;
+border: none;
+padding: 12px 20px;
+cursor: pointer;
+border-radius: 5px;
+font-size: 16px;
+width: 100%;
+}
+
+button:hover {
+background-color: #444;
+}
+
+.summary {
+background: #f8f8f8;
+padding: 15px;
+margin-bottom: 20px;
+border-radius: 8px;
+}
+
+.summary strong {
+display: block;
+margin-top: 10px;
+}
+</style>
 </head>
 <body>
-<header>
+
 <img src="logo.jpeg" alt="Adi’s Choice Logo" class="logo" />
+
 <h1>Checkout</h1>
-</header>
 
-<main>
-<form id="checkoutForm" class="checkout-form">
-<h2>Your Details</h2>
-<input type="text" name="name" placeholder="Full Name" required />
-<input type="email" name="email" placeholder="Email Address" required />
+<div class="summary" id="orderSummary">
+<h3>Your Order</h3>
+<p id="bundleTypeText"></p>
+<strong id="bundlePriceText"></strong>
+</div>
 
-<h2>Your Bundle</h2>
-<div id="bundleSummary"></div>
+<form id="checkoutForm">
+<label for="name">Full Name:</label>
+<input type="text" id="name" name="name" required />
 
-<h2>Delivery Method</h2>
-<select name="delivery" required>
-<option value="">Select delivery method</option>
-<option value="DPD Courier">DPD Courier</option>
-<option value="InPost">InPost</option>
-<option value="DHL">DHL</option>
-</select>
+<label for="email">Email Address:</label>
+<input type="email" id="email" name="email" required />
 
-<h2>Payment Method</h2>
-<select name="payment" required>
-<option value="">Select payment method</option>
-<option value="Bank Transfer">Bank Transfer</option>
-</select>
+<label for="additionalInfo">Additional Info <small>(e.g., preferred Bundle colors)</small>:</label>
+<textarea id="additionalInfo" name="additionalInfo" rows="3"></textarea>
 
-<h2>Additional Info</h2>
-<textarea name="additionalInfo" placeholder="Preferred colors, special requests..."></textarea>
-
-<button type="submit" class="btn">Place Order</button>
+<button type="submit">Place Order</button>
 </form>
-</main>
 
 <script>
-// Populate summary from selection
+// Display summary
 const params = new URLSearchParams(window.location.search);
-const classic = params.get('classic') || 'None';
-const superPick = params.get('super') || 'None';
-const premium = params.get('premium') || 'None';
+const bundleType = params.get('bundle') || 'Classic Mystery Bundle';
+const bundlePrice = params.get('price') || '€6.50';
+document.getElementById('bundleTypeText').innerText = bundleType;
+document.getElementById('bundlePriceText').innerText = "Total: " + bundlePrice;
 
-const bundleSummary = `
-<p><strong>Classic Picks:</strong> ${classic}</p>
-<p><strong>Super Pick:</strong> ${superPick}</p>
-<p><strong>Premium Pick:</strong> ${premium}</p>
-`;
-document.getElementById('bundleSummary').innerHTML = bundleSummary;
-
-// Send form data via SendGrid API
+// Form submission
 document.getElementById('checkoutForm').addEventListener('submit', async (e) => {
 e.preventDefault();
-const formData = Object.fromEntries(new FormData(e.target).entries());
+const form = e.target;
 
-const response = await fetch('/api/sendEmail', {
+const data = {
+name: form.name.value,
+email: form.email.value,
+bundleType: bundleType,
+bundlePrice: bundlePrice,
+additionalInfo: form.additionalInfo.value
+};
+
+try {
+const res = await fetch('/api/sendEmail', {
 method: 'POST',
 headers: { 'Content-Type': 'application/json' },
-body: JSON.stringify({
-name: formData.name,
-email: formData.email,
-bundleType: `${classic} | ${superPick} | ${premium}`,
-bundleCount: 1,
-price: "TBD",
-additionalInfo: formData.additionalInfo,
-}),
+body: JSON.stringify(data)
 });
 
-if (response.ok) {
+const text = await res.text();
+
+if (res.ok) {
 window.location.href = 'thankyou.html';
 } else {
-alert('Something went wrong. Please try again.');
+alert('Server returned error:\nStatus: ' + res.status + '\n\nResponse:\n' + text);
+console.error('Error response:', text);
+}
+} catch (err) {
+alert('Unexpected error: ' + err.message);
+console.error(err);
 }
 });
 </script>
+
 </body>
 </html>
