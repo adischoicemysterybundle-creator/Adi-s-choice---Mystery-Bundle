@@ -1,5 +1,3 @@
-// File: /api/sendEmail.js
-
 import sgMail from "@sendgrid/mail";
 
 // Klucz API zdefiniowany w Vercel → Settings → Environment Variables
