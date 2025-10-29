@@ -3,140 +3,152 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Checkout | Adi’s Choice Mystery Bundle</title>
+<title>Checkout — Adi’s Choice</title>
 <link rel="stylesheet" href="style.css" />
 <style>
 body {
-font-family: Arial, sans-serif;
-background-color: #fffaf4;
-text-align: center;
-padding: 20px;
+background-color: #fffaf5;
+font-family: 'Poppins', sans-serif;
+color: #222;
+margin: 0;
+padding: 0;
 }
 
-img.logo {
-width: 160px;
-margin-bottom: 20px;
-}
-
-form {
+.checkout-container {
 max-width: 500px;
-margin: 0 auto;
-text-align: left;
-background: #fff;
-padding: 25px;
-border-radius: 10px;
+margin: 60px auto;
+background: white;
+padding: 40px;
+border-radius: 12px;
 box-shadow: 0 0 10px rgba(0,0,0,0.1);
 }
 
-label {
+.checkout-container img {
 display: block;
-margin: 10px 0 5px;
-font-weight: bold;
+margin: 0 auto 20px;
+width: 130px;
 }
 
-input, textarea {
+h1 {
+text-align: center;
+color: #c4a13f;
+}
+
+form label {
+display: block;
+margin-top: 15px;
+font-weight: 600;
+}
+
+form input, form select, form textarea {
 width: 100%;
 padding: 10px;
-margin-bottom: 15px;
-border: 1px solid #ccc;
-border-radius: 5px;
+margin-top: 5px;
+border: 1px solid #ddd;
+border-radius: 8px;
+font-size: 15px;
+}
+
+textarea {
+resize: none;
 }
 
 button {
-background-color: black;
-color: white;
-border: none;
-padding: 12px 20px;
-cursor: pointer;
-border-radius: 5px;
-font-size: 16px;
+display: block;
 width: 100%;
+margin-top: 25px;
+padding: 12px;
+background: #c4a13f;
+color: white;
+font-weight: bold;
+border: none;
+border-radius: 8px;
+cursor: pointer;
+transition: 0.3s;
 }
 
 button:hover {
-background-color: #444;
+background: #b3912c;
 }
 
-.summary {
-background: #f8f8f8;
-padding: 15px;
-margin-bottom: 20px;
-border-radius: 8px;
-}
-
-.summary strong {
-display: block;
+.error {
+color: red;
+text-align: center;
 margin-top: 10px;
 }
 </style>
 </head>
 <body>
-
-<img src="logo.jpeg" alt="Adi’s Choice Logo" class="logo" />
-
+<div class="checkout-container">
+<img src="logo.jpeg" alt="Adi's Choice Logo" />
 <h1>Checkout</h1>
 
-<div class="summary" id="orderSummary">
-<h3>Your Order</h3>
-<p id="bundleTypeText"></p>
-<strong id="bundlePriceText"></strong>
-</div>
-
 <form id="checkoutForm">
-<label for="name">Full Name:</label>
+<label for="name">Full Name</label>
 <input type="text" id="name" name="name" required />
 
-<label for="email">Email Address:</label>
+<label for="email">Email Address</label>
 <input type="email" id="email" name="email" required />
 
-<label for="additionalInfo">Additional Info <small>(e.g., preferred Bundle colors)</small>:</label>
-<textarea id="additionalInfo" name="additionalInfo" rows="3"></textarea>
+<label for="bundleType">Mystery Bundle</label>
+<select id="bundleType" name="bundleType" required>
+<option value="">-- Choose your Mystery Bundle --</option>
+<option value="Classic 1 item">Classic — 1 item</option>
+<option value="Classic 5 items">Classic — 5 items</option>
+<option value="Classic 10 items">Classic — 10 items</option>
+<option value="Super Pick 1 item">Super Pick — 1 item</option>
+<option value="Super Pick 5 items">Super Pick — 5 items</option>
+<option value="Super Pick 10 items">Super Pick — 10 items</option>
+<option value="Premium Pick 1 item">Premium Pick — 1 item</option>
+<option value="Premium Pick 5 items">Premium Pick — 5 items</option>
+</select>
+
+<label for="bundlePrice">Total Amount (EUR)</label>
+<input type="number" id="bundlePrice" name="bundlePrice" placeholder="Enter total price" required />
+
+<label for="additionalInfo">Additional Info (e.g. preferred colors)</label>
+<textarea id="additionalInfo" name="additionalInfo" rows="3" placeholder="Optional"></textarea>
 
 <button type="submit">Place Order</button>
+<p id="errorMsg" class="error"></p>
 </form>
+</div>
 
 <script>
-// Display summary
-const params = new URLSearchParams(window.location.search);
-const bundleType = params.get('bundle') || 'Classic Mystery Bundle';
-const bundlePrice = params.get('price') || '€6.50';
-document.getElementById('bundleTypeText').innerText = bundleType;
-document.getElementById('bundlePriceText').innerText = "Total: " + bundlePrice;
-
-// Form submission
-document.getElementById('checkoutForm').addEventListener('submit', async (e) => {
+document.getElementById("checkoutForm").addEventListener("submit", async function(e) {
 e.preventDefault();
-const form = e.target;
+
+const errorMsg = document.getElementById("errorMsg");
+errorMsg.textContent = "";
 
 const data = {
-name: form.name.value,
-email: form.email.value,
-bundleType: bundleType,
-bundlePrice: bundlePrice,
-additionalInfo: form.additionalInfo.value
+name: document.getElementById("name").value.trim(),
+email: document.getElementById("email").value.trim(),
+bundleType: document.getElementById("bundleType").value,
+bundlePrice: document.getElementById("bundlePrice").value,
+additionalInfo: document.getElementById("additionalInfo").value.trim()
 };
 
 try {
-const res = await fetch('/api/sendEmail', {
-method: 'POST',
-headers: { 'Content-Type': 'application/json' },
+const res = await fetch("/api/sendEmail", {
+method: "POST",
+headers: { "Content-Type": "application/json" },
 body: JSON.stringify(data)
 });
 
-const text = await res.text();
-
 if (res.ok) {
-window.location.href = 'thankyou.html';
+window.location.href = "thankyou.html";
 } else {
-alert('Server returned error:\nStatus: ' + res.status + '\n\nResponse:\n' + text);
-console.error('Error response:', text);
+const result = await res.json();
+errorMsg.textContent = result.message || "Something went wrong. Please try again.";
 }
 } catch (err) {
-alert('Unexpected error: ' + err.message);
 console.error(err);
+errorMsg.textContent = "An error occurred. Please try again.";
 }
 });
 </script>
-
 </body>
 </html>
+	
+
