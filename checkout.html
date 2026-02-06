@@ -11,22 +11,27 @@
 
 <h1>Checkout</h1>
 
+<!-- ORDER SUMMARY -->
 <div class="box">
 <h2>Order summary</h2>
 <ul id="summary"></ul>
 <p><strong>Total: <span id="total">0</span> €</strong></p>
 </div>
 
+<!-- FORM -->
 <form id="orderForm" class="box">
 
+<!-- hidden order data -->
 <input type="hidden" name="Order summary" id="summaryInput">
 <input type="hidden" name="Total (€)" id="totalInput">
 
+<!-- CUSTOMER DETAILS -->
 <input type="text" name="Name" placeholder="Full name" required>
 <input type="email" name="Email" placeholder="Email address" required>
 <input type="tel" name="Phone" placeholder="Phone number" required>
 <input type="text" name="Address" placeholder="Full delivery address" required>
 
+<!-- DELIVERY -->
 <label>
 Delivery method:
 <select name="Delivery" required>
@@ -40,12 +45,17 @@ Delivery method:
 </select>
 </label>
 
+<!-- EXTRA OPTIONS (PRZYWRÓCONE) -->
+<input type="text" name="Preferred color" placeholder="Preferred color (optional)">
+<input type="text" name="Promo code" placeholder="Promo / discount code (optional)">
+
 <textarea name="Notes" placeholder="Additional notes" rows="4"></textarea>
 
 <button type="submit">Place order</button>
 </form>
 
 <script>
+// ===== SUMMARY FROM INDEX =====
 const params = new URLSearchParams(window.location.search);
 const summaryList = document.getElementById("summary");
 
@@ -72,6 +82,7 @@ document.getElementById("total").textContent = total;
 document.getElementById("summaryInput").value = summaryText.join(" | ");
 document.getElementById("totalInput").value = total;
 
+// ===== FORM SUBMIT =====
 document.getElementById("orderForm").addEventListener("submit", function(e) {
 e.preventDefault();
 
@@ -79,8 +90,12 @@ fetch("https://formspree.io/f/xnngvjaz", {
 method: "POST",
 body: new FormData(this),
 headers: { "Accept": "application/json" }
-}).then(() => {
+})
+.then(() => {
 window.location.href = "thankyou.html";
+})
+.catch(() => {
+alert("Something went wrong. Please try again.");
 });
 });
 </script>
