@@ -18,25 +18,25 @@
 <p><strong>Total: <span id="total">0</span> zł</strong></p>
 </div>
 
-<!-- CHECKOUT FORM -->
+<!-- FORM -->
 <form
 action="https://formspree.io/f/xnngvjaz"
 method="POST"
 class="box"
 >
 
-<!-- 🔴 KLUCZOWE: PRZEKIEROWANIE NA TWOJĄ STRONĘ -->
+<!-- 🔴 TO JEST KLUCZOWE -->
 <input
 type="hidden"
 name="_redirect"
-value="thankyou.html"
+value="https://adi-s-choice-mystery-bundle.vercel.app/thankyou.html"
 >
 
 <!-- hidden order data -->
 <input type="hidden" name="Order summary" id="summaryInput">
 <input type="hidden" name="Total price (PLN)" id="totalInput">
 
-<!-- CUSTOMER DETAILS -->
+<!-- CUSTOMER -->
 <input type="text" name="Name" placeholder="Full name" required>
 <input type="email" name="Email" placeholder="Email address" required>
 <input type="tel" name="Phone" placeholder="Phone number" required>
@@ -56,7 +56,7 @@ Delivery method:
 </select>
 </label>
 
-<!-- EXTRA INFO -->
+<!-- EXTRA -->
 <input type="text" name="Preferred color" placeholder="Preferred color (optional)">
 <input type="text" name="Promo code" placeholder="Promo code (optional)">
 <textarea name="Notes" placeholder="Additional notes" rows="4"></textarea>
