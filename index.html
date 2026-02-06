@@ -13,7 +13,7 @@
 
 <form action="checkout.html" method="GET" class="box">
 
-<!-- STANDARD -->
+<!-- STANDARD PICKS -->
 <h2>Standard picks</h2>
 <select name="standard" required>
 <option value="">Select standard picks</option>
@@ -25,39 +25,25 @@
 <option value="30 standard picks|27">30 picks – 27 €</option>
 </select>
 
-<!-- SUPER -->
+<!-- SUPER PICKS (FIXED LOGIC) -->
 <h2>Super picks</h2>
-
-<label>
-Super picks (1–4 pcs, 5 € each):
-<select name="super_single">
-<option value="">None</option>
-<option value="1 super pick|5">1 – 5 €</option>
-<option value="2 super picks|10">2 – 10 €</option>
-<option value="3 super picks|15">3 – 15 €</option>
-<option value="4 super picks|20">4 – 20 €</option>
+<select name="super">
+<option value="">No super picks</option>
+<option value="1 super pick|4">1 super pick – 4 €</option>
+<option value="2 super picks|8">2 super picks – 8 €</option>
+<option value="3 super picks|12">3 super picks – 12 €</option>
+<option value="4 super picks|16">4 super picks – 16 €</option>
+<option value="5 super picks package|18">5 super picks – 18 €</option>
 </select>
-</label>
 
-<label>
-Super picks package:
-<select name="super_pack">
-<option value="">No package</option>
-<option value="5 super picks package|19">5 super picks – 19 €</option>
-</select>
-</label>
-
-<!-- PREMIUM -->
+<!-- PREMIUM PICKS -->
 <h2>Premium picks</h2>
-<label>
-Premium picks (max 3):
 <select name="premium">
-<option value="">None</option>
-<option value="1 premium pick|7">1 – 7 €</option>
-<option value="2 premium picks|14">2 – 14 €</option>
-<option value="3 premium picks|21">3 – 21 €</option>
+<option value="">No premium picks</option>
+<option value="1 premium pick|7">1 premium pick – 7 €</option>
+<option value="2 premium picks|14">2 premium picks – 14 €</option>
+<option value="3 premium picks|21">3 premium picks – 21 €</option>
 </select>
-</label>
 
 <button type="submit">Continue to checkout</button>
 </form>

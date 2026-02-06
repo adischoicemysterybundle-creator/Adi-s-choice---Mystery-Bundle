@@ -18,7 +18,7 @@
 <p><strong>Total: <span id="total">0</span> €</strong></p>
 </div>
 
-<!-- FORM -->
+<!-- CHECKOUT FORM -->
 <form id="orderForm" class="box">
 
 <!-- hidden order data -->
@@ -45,17 +45,16 @@ Delivery method:
 </select>
 </label>
 
-<!-- EXTRA OPTIONS (PRZYWRÓCONE) -->
+<!-- EXTRA OPTIONS -->
 <input type="text" name="Preferred color" placeholder="Preferred color (optional)">
 <input type="text" name="Promo code" placeholder="Promo / discount code (optional)">
-
 <textarea name="Notes" placeholder="Additional notes" rows="4"></textarea>
 
 <button type="submit">Place order</button>
 </form>
 
 <script>
-// ===== SUMMARY FROM INDEX =====
+// ===== GET DATA FROM INDEX =====
 const params = new URLSearchParams(window.location.search);
 const summaryList = document.getElementById("summary");
 
@@ -64,8 +63,10 @@ let summaryText = [];
 
 function addItem(param) {
 if (!param) return;
+
 const [name, price] = param.split("|");
-total += parseInt(price);
+total += parseInt(price, 10);
+
 summaryText.push(`${name} – ${price} €`);
 
 const li = document.createElement("li");
@@ -74,16 +75,15 @@ summaryList.appendChild(li);
 }
 
 addItem(params.get("standard"));
-addItem(params.get("super_single"));
-addItem(params.get("super_pack"));
+addItem(params.get("super")); // ⬅️ JEDNO pole (1–4 lub 5)
 addItem(params.get("premium"));
 
 document.getElementById("total").textContent = total;
 document.getElementById("summaryInput").value = summaryText.join(" | ");
 document.getElementById("totalInput").value = total;
 
-// ===== FORM SUBMIT =====
-document.getElementById("orderForm").addEventListener("submit", function(e) {
+// ===== SEND TO FORMSPREE + FORCE THANK YOU =====
+document.getElementById("orderForm").addEventListener("submit", function (e) {
 e.preventDefault();
 
 fetch("https://formspree.io/f/xnngvjaz", {
