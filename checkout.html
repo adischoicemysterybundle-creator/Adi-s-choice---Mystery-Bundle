@@ -19,18 +19,7 @@
 </div>
 
 <!-- FORM -->
-<form
-action="https://formspree.io/f/xnngvjaz"
-method="POST"
-class="box"
->
-
-<!-- 🔴 TO JEST KLUCZOWE -->
-<input
-type="hidden"
-name="_redirect"
-value="https://adi-s-choice-mystery-bundle.vercel.app/thankyou.html"
->
+<form id="orderForm" class="box">
 
 <!-- hidden order data -->
 <input type="hidden" name="Order summary" id="summaryInput">
@@ -64,8 +53,8 @@ Delivery method:
 <button type="submit">Place order</button>
 </form>
 
-<!-- SUMMARY SCRIPT -->
 <script>
+// ===== SUMMARY FROM INDEX =====
 const params = new URLSearchParams(window.location.search);
 const summaryList = document.getElementById("summary");
 
@@ -74,10 +63,8 @@ let summaryText = [];
 
 function addItem(param) {
 if (!param) return;
-
 const [name, price] = param.split("|");
 total += parseInt(price);
-
 summaryText.push(`${name} – ${price} zł`);
 
 const li = document.createElement("li");
@@ -92,6 +79,25 @@ addItem(params.get("premium"));
 document.getElementById("total").textContent = total;
 document.getElementById("summaryInput").value = summaryText.join(" | ");
 document.getElementById("totalInput").value = total;
+
+// ===== FORM SUBMIT (FORMSPREE + FORCE REDIRECT) =====
+document.getElementById("orderForm").addEventListener("submit", function (e) {
+e.preventDefault();
+
+const formData = new FormData(this);
+
+fetch("https://formspree.io/f/xnngvjaz", {
+method: "POST",
+body: formData,
+headers: { "Accept": "application/json" }
+})
+.then(() => {
+window.location.href = "thankyou.html";
+})
+.catch(() => {
+alert("Something went wrong. Please try again.");
+});
+});
 </script>
 
 </body>
