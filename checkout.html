@@ -11,36 +11,49 @@
 
 <h1>Checkout</h1>
 
+<!-- ORDER SUMMARY -->
 <div class="box">
 <h2>Order summary</h2>
 <ul id="summary"></ul>
-<p><strong>Total: <span id="total"></span> zł</strong></p>
+<p><strong>Total: <span id="total">0</span> zł</strong></p>
 </div>
 
+<!-- CHECKOUT FORM -->
 <form action="thankyou.html" method="GET" class="box">
 
 <!-- hidden fields -->
 <input type="hidden" name="summary" id="summaryInput">
 <input type="hidden" name="total" id="totalInput">
 
+<!-- CUSTOMER DETAILS -->
 <input type="text" name="name" placeholder="Full name" required>
 <input type="email" name="email" placeholder="Email address" required>
 <input type="tel" name="phone" placeholder="Phone number" required>
 <input type="text" name="address" placeholder="Shipping address" required>
 
+<!-- DELIVERY METHOD -->
+<label>
+Delivery method:
 <select name="delivery" required>
 <option value="">Select delivery method</option>
-<option value="DPD">DPD Courier</option>
-<option value="Post">Postal Service</option>
+<option value="InPost">InPost</option>
+<option value="DPD">DPD</option>
+<option value="GLS">GLS</option>
+<option value="DHL">DHL</option>
+<option value="Post">Postal service</option>
+<option value="Other">Other (specify in notes)</option>
 </select>
+</label>
 
+<!-- ADDITIONAL OPTIONS -->
 <input type="text" name="color" placeholder="Preferred color (optional)">
 <input type="text" name="promo" placeholder="Promo code (optional)">
-<textarea name="notes" placeholder="Additional notes (optional)"></textarea>
+<textarea name="notes" placeholder="Additional notes (optional)" rows="3"></textarea>
 
 <button type="submit">Place order</button>
 </form>
 
+<!-- SUMMARY SCRIPT -->
 <script>
 const params = new URLSearchParams(window.location.search);
 const summaryList = document.getElementById("summary");
