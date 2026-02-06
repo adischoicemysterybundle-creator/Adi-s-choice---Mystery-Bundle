@@ -19,36 +19,47 @@
 </div>
 
 <!-- CHECKOUT FORM -->
-<form action="thankyou.html" method="GET" class="box">
+<form
+action="https://formspree.io/f/xnngvjaz"
+method="POST"
+class="box"
+>
 
-<!-- hidden fields -->
-<input type="hidden" name="summary" id="summaryInput">
-<input type="hidden" name="total" id="totalInput">
+<!-- 🔴 KLUCZOWE: PRZEKIEROWANIE NA TWOJĄ STRONĘ -->
+<input
+type="hidden"
+name="_redirect"
+value="thankyou.html"
+>
+
+<!-- hidden order data -->
+<input type="hidden" name="Order summary" id="summaryInput">
+<input type="hidden" name="Total price (PLN)" id="totalInput">
 
 <!-- CUSTOMER DETAILS -->
-<input type="text" name="name" placeholder="Full name" required>
-<input type="email" name="email" placeholder="Email address" required>
-<input type="tel" name="phone" placeholder="Phone number" required>
-<input type="text" name="address" placeholder="Shipping address" required>
+<input type="text" name="Name" placeholder="Full name" required>
+<input type="email" name="Email" placeholder="Email address" required>
+<input type="tel" name="Phone" placeholder="Phone number" required>
+<input type="text" name="Address" placeholder="Full delivery address" required>
 
-<!-- DELIVERY METHOD -->
+<!-- DELIVERY -->
 <label>
 Delivery method:
-<select name="delivery" required>
-<option value="">Select delivery method</option>
+<select name="Delivery" required>
+<option value="">Select delivery</option>
 <option value="InPost">InPost</option>
-<option value="DPD">DPD</option>
 <option value="GLS">GLS</option>
 <option value="DHL">DHL</option>
-<option value="Post">Postal service</option>
-<option value="Other">Other (specify in notes)</option>
+<option value="DPD">DPD</option>
+<option value="Postal service">Postal service</option>
+<option value="Other">Other (see notes)</option>
 </select>
 </label>
 
-<!-- ADDITIONAL OPTIONS -->
-<input type="text" name="color" placeholder="Preferred color (optional)">
-<input type="text" name="promo" placeholder="Promo code (optional)">
-<textarea name="notes" placeholder="Additional notes (optional)" rows="3"></textarea>
+<!-- EXTRA INFO -->
+<input type="text" name="Preferred color" placeholder="Preferred color (optional)">
+<input type="text" name="Promo code" placeholder="Promo code (optional)">
+<textarea name="Notes" placeholder="Additional notes" rows="4"></textarea>
 
 <button type="submit">Place order</button>
 </form>
@@ -63,8 +74,10 @@ let summaryText = [];
 
 function addItem(param) {
 if (!param) return;
+
 const [name, price] = param.split("|");
 total += parseInt(price);
+
 summaryText.push(`${name} – ${price} zł`);
 
 const li = document.createElement("li");
@@ -77,7 +90,7 @@ addItem(params.get("super"));
 addItem(params.get("premium"));
 
 document.getElementById("total").textContent = total;
-document.getElementById("summaryInput").value = summaryText.join(", ");
+document.getElementById("summaryInput").value = summaryText.join(" | ");
 document.getElementById("totalInput").value = total;
 </script>
 
