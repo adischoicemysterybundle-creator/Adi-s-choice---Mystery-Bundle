@@ -1,50 +1,47 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Mystery Bundle | Adi’s Choice</title>
-<link rel="stylesheet" href="style.css" />
+<meta charset="UTF-8">
+<title>Adi’s Choice – Picks</title>
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
-<header>
-<img src="logo.jpeg" alt="Adi’s Choice Logo" class="logo" />
-<h1>Mystery Bundle – Adi’s Choice</h1>
-<p>Choose your perfect Mystery Bundle below</p>
-</header>
 
-<main>
-<form action="checkout.html" method="GET" class="bundle-form">
+<img src="logo.jpeg" alt="Adi’s Choice" class="logo">
 
-<label for="classic">Classic Picks:</label>
-<select id="classic" name="classic">
-<option value="">None</option>
-<option value="5 Picks – €6.50">5 Picks – €6.50</option>
-<option value="10 Picks – €11.50">10 Picks – €11.50</option>
-<option value="15 Picks – €16.00">15 Picks – €16.00</option>
-<option value="20 Picks – €20.00">20 Picks – €20.00</option>
-<option value="25 Picks – €23.00">25 Picks – €23.00</option>
-<option value="30 Picks – €26.50">30 Picks – €26.50</option>
-<option value="35 Picks – €30.00">35 Picks – €30.00</option>
+<h1>Choose your picks</h1>
+
+<form action="checkout.html" method="GET" class="box">
+
+<h2>Standard picks</h2>
+<select name="standard" required>
+<option value="">Select standard picks</option>
+<option value="5 picks|29">5 picks – 29 zł</option>
+<option value="10 picks|52">10 picks – 52 zł</option>
+<option value="15 picks|68">15 picks – 68 zł</option>
+<option value="20 picks|84">20 picks – 84 zł</option>
+<option value="25 picks|99">25 picks – 99 zł</option>
+<option value="30 picks|114">30 picks – 114 zł</option>
+<option value="35 picks|129">35 picks – 129 zł</option>
 </select>
 
-<label for="super">Super Pick:</label>
-<select id="super" name="super">
-<option value="">None</option>
-<option value="1 Super Pick – €5.00">1 Super Pick – €5.00</option>
-<option value="5 Super Picks – €18.50">5 Super Picks – €18.50</option>
-<option value="10 Super Picks – €35.00">10 Super Picks – €35.00</option>
+<h2>Super picks (optional)</h2>
+<select name="super">
+<option value="">No super picks</option>
+<option value="Super pick – 1|20">1 super pick – 20 zł</option>
+<option value="Super pick – 5|80">5 super picks – 80 zł</option>
+<option value="Super pick – 10|150">10 super picks – 150 zł</option>
 </select>
 
-<label for="premium">Premium Pick:</label>
-<select id="premium" name="premium">
-<option value="">None</option>
-<option value="1 Premium Pick – €7.00">1 Premium Pick – €7.00</option>
-<option value="5 Premium Picks – €28.00">5 Premium Picks – €28.00</option>
+<h2>Premium picks (optional)</h2>
+<select name="premium">
+<option value="">No premium picks</option>
+<option value="Premium pick – 1|30">1 premium pick – 30 zł</option>
+<option value="Premium pick – 5|120">5 premium picks – 120 zł</option>
 </select>
 
-<button type="submit" class="btn">Continue to Checkout</button>
+<button type="submit">Continue to checkout</button>
 </form>
-</main>
+
 </body>
 </html>

@@ -1,186 +1,72 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Checkout – Adi’s Choice</title>
-<link rel="stylesheet" href="style.css" />
-<style>
-body {
-font-family: "Poppins", sans-serif;
-background-color: #fffaf2;
-color: #333;
-margin: 0;
-padding: 0;
-}
-header {
-text-align: center;
-padding: 20px;
-}
-header img {
-width: 120px;
-}
-h1 {
-text-align: center;
-color: #b28d2d;
-}
-form {
-max-width: 600px;
-margin: 20px auto;
-background: #fff;
-padding: 25px;
-border-radius: 10px;
-box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-}
-label {
-font-weight: 600;
-display: block;
-margin-bottom: 6px;
-}
-input, select, textarea {
-width: 100%;
-padding: 10px;
-margin-bottom: 15px;
-border-radius: 6px;
-border: 1px solid #ccc;
-font-size: 14px;
-}
-textarea {
-resize: vertical;
-min-height: 70px;
-}
-.order-summary {
-background: #fff8e1;
-border: 1px solid #e0c96b;
-padding: 15px;
-border-radius: 8px;
-margin-bottom: 20px;
-}
-button {
-width: 100%;
-background-color: #b28d2d;
-color: #fff;
-padding: 15px;
-border: none;
-border-radius: 6px;
-font-size: 16px;
-cursor: pointer;
-transition: 0.3s;
-}
-button:hover {
-background-color: #9c7a24;
-}
-</style>
+<meta charset="UTF-8">
+<title>Checkout</title>
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
-<header>
-<img src="logo.jpeg" alt="Adi’s Choice Logo">
-</header>
+
+<img src="logo.jpeg" alt="Adi’s Choice" class="logo">
 
 <h1>Checkout</h1>
 
-<form id="checkout-form">
-<div class="order-summary">
-<h3>Order Summary</h3>
-<p id="bundleName"></p>
-<p id="bundlePrice"></p>
+<div class="box">
+<h2>Order summary</h2>
+<ul id="summary"></ul>
+<p><strong>Total: <span id="total"></span> zł</strong></p>
 </div>
 
-<label for="name">Full Name</label>
-<input type="text" id="name" name="name" required />
+<form action="thankyou.html" method="GET" class="box">
 
-<label for="email">Email Address</label>
-<input type="email" id="email" name="email" required />
+<!-- hidden fields -->
+<input type="hidden" name="summary" id="summaryInput">
+<input type="hidden" name="total" id="totalInput">
 
-<label for="phone">Phone Number</label>
-<input type="tel" id="phone" name="phone" required placeholder="+48 600 000 000" />
+<input type="text" name="name" placeholder="Full name" required>
+<input type="email" name="email" placeholder="Email address" required>
+<input type="tel" name="phone" placeholder="Phone number" required>
+<input type="text" name="address" placeholder="Shipping address" required>
 
-<label for="address">Street Address</label>
-<input type="text" id="address" name="address" required />
-
-<label for="city">City</label>
-<input type="text" id="city" name="city" required />
-
-<label for="postal">Postal Code</label>
-<input type="text" id="postal" name="postal" required />
-
-<label for="country">Country</label>
-<input type="text" id="country" name="country" required />
-
-<label for="delivery">Delivery Method</label>
-<select id="delivery" name="delivery" required>
+<select name="delivery" required>
 <option value="">Select delivery method</option>
-<option value="DPD">DPD</option>
-<option value="InPost">InPost</option>
-<option value="DHL">DHL</option>
-<option value="Poczta Polska">Poczta Polska</option>
+<option value="DPD">DPD Courier</option>
+<option value="Post">Postal Service</option>
 </select>
 
-<label for="additionalInfo">Additional Info (e.g. preferred colors)</label>
-<textarea id="additionalInfo" name="additionalInfo"></textarea>
+<input type="text" name="color" placeholder="Preferred color (optional)">
+<input type="text" name="promo" placeholder="Promo code (optional)">
+<textarea name="notes" placeholder="Additional notes (optional)"></textarea>
 
-<button type="submit">Place Order</button>
+<button type="submit">Place order</button>
 </form>
 
 <script>
-// Load summary from localStorage
-document.addEventListener("DOMContentLoaded", () => {
-const bundleType = localStorage.getItem("bundleType") || "No bundle selected";
-const bundlePrice = localStorage.getItem("bundlePrice") || "0 EUR";
-document.getElementById("bundleName").textContent = "Selected: " + bundleType;
-document.getElementById("bundlePrice").textContent = "Price: " + bundlePrice;
-});
+const params = new URLSearchParams(window.location.search);
+const summaryList = document.getElementById("summary");
 
-document.getElementById("checkout-form").addEventListener("submit", async (e) => {
-e.preventDefault();
+let total = 0;
+let summaryText = [];
 
-const name = document.getElementById("name").value;
-const email = document.getElementById("email").value;
-const phone = document.getElementById("phone").value;
-const address = document.getElementById("address").value;
-const city = document.getElementById("city").value;
-const postal = document.getElementById("postal").value;
-const country = document.getElementById("country").value;
-const delivery = document.getElementById("delivery").value;
-const additionalInfo = document.getElementById("additionalInfo").value;
-const bundleType = localStorage.getItem("bundleType");
-const bundlePrice = localStorage.getItem("bundlePrice");
+function addItem(param) {
+if (!param) return;
+const [name, price] = param.split("|");
+total += parseInt(price);
+summaryText.push(`${name} – ${price} zł`);
 
-const orderData = {
-name,
-email,
-phone,
-address,
-city,
-postal,
-country,
-delivery,
-bundleType,
-bundlePrice,
-additionalInfo
-};
-
-try {
-const response = await fetch("/api/sendEmail", {
-method: "POST",
-headers: { "Content-Type": "application/json" },
-body: JSON.stringify(orderData)
-});
-
-const data = await response.json();
-
-if (response.ok) {
-window.location.href = "thankyou.html";
-} else {
-console.error("Server error:", data);
-alert("Something went wrong. Please try again.");
+const li = document.createElement("li");
+li.textContent = `${name} – ${price} zł`;
+summaryList.appendChild(li);
 }
-} catch (error) {
-console.error("Request failed:", error);
-alert("Error sending order. Please try again later.");
-}
-});
+
+addItem(params.get("standard"));
+addItem(params.get("super"));
+addItem(params.get("premium"));
+
+document.getElementById("total").textContent = total;
+document.getElementById("summaryInput").value = summaryText.join(", ");
+document.getElementById("totalInput").value = total;
 </script>
+
 </body>
 </html>
-	
